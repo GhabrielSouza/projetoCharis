@@ -63,75 +63,279 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Maria da Silva Santos</td>
-                            <td>123.456.789-09</td>
-                            <td>32 anos</td>
-                            <td>São Paulo/SP</td>
-                            <td>15/03/2022</td>
-                            <td><span class="badge badge-success">Ativo</span></td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-info" title="Visualizar completo">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button data-toggle="modal" data-target="#modalCadastroBeneficiario"
-                                        class="btn btn-warning" title="Editar cadastro">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-danger" title="Inativar beneficiário">
-                                        <i class="fas fa-user-times"></i>
-                                    </button>
+                        @foreach ($beneficiarios as $beneficiario)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $beneficiario->nome }}</td>
+                                <td>{{ $beneficiario->cpf }}</td>
+                                <td>{{ \Carbon\Carbon::parse($beneficiario->data_nascimento)->age }} anos</td>
+                                <td>
+                                    @if($beneficiario->endereco && $beneficiario->endereco->cidade)
+                                        {{ $beneficiario->endereco->cidade->nome }}/{{ $beneficiario->endereco->cidade->estado->sigla }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
+                                <td>{{ $beneficiario->created_at->format('d/m/Y') }}</td>
+                                <td>
+                                    @if ($beneficiario->status == 'ativo')
+                                        <span class="badge badge-success">Ativo</span>
+                                    @elseif ($beneficiario->status == 'pendente')
+                                        <span class="badge badge-warning">Pendente</span>
+                                    @else
+                                        <span class="badge badge-danger">Inativo</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm">
+
+                                        <button class="btn btn-info" title="Visualizar completo">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+
+                                        <button data-toggle="modal"
+                                            data-target="#modalEditarBeneficiario-{{ $beneficiario->id }}"
+                                            class="btn btn-warning" title="Editar cadastro">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+
+                                        <form action="{{ route('beneficiarios.toggleStatus', $beneficiario->id) }}"
+                                            method="POST" style="display: inline;">
+                                            @csrf
+
+                                            @if ($beneficiario->status == 'ativo')
+                                                <button type="submit" class="btn btn-danger" title="Inativar beneficiário"
+                                                    style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                    <i class="fas fa-user-times"></i>
+                                                </button>
+                                            @else
+                                                <button type="submit" class="btn btn-success" title="Ativar beneficiário"
+                                                    style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                                    <i class="fas fa-user-check"></i>
+                                                </button>
+                                            @endif
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <div class="modal fade" id="modalEditarBeneficiario-{{ $beneficiario->id }}" tabindex="-1"
+                                role="dialog" aria-labelledby="tituloModalEdicao-{{ $beneficiario->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+
+                                        <form id="formEdicaoBeneficiario-{{ $beneficiario->id }}"
+                                            action="{{ route('beneficiarios.update', $beneficiario->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+
+                                            <div class="modal-header bg-orange text-dark">
+                                                <h5 class="modal-title" id="tituloModalEdicao-{{ $beneficiario->id }}">
+                                                    <i class="fas fa-edit mr-2"></i>Editar Cadastro de:
+                                                    <strong>{{ $beneficiario->nome }}</strong>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+
+                                            <div class="modal-body">
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+                                                            <label for="nome-{{ $beneficiario->id }}">Nome Completo</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-user"></i></span></div>
+                                                                <input type="text" id="nome-{{ $beneficiario->id }}" name="nome"
+                                                                    class="form-control"
+                                                                    value="{{ old('nome', $beneficiario->nome) }}" required>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="data_nascimento-{{ $beneficiario->id }}">Data de
+                                                                Nascimento</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-calendar-alt"></i></span></div>
+                                                                <input type="date" id="data_nascimento-{{ $beneficiario->id }}"
+                                                                    name="data_nascimento" class="form-control"
+                                                                    value="{{ old('data_nascimento', $beneficiario->data_nascimento->format('Y-m-d')) }}"
+                                                                    required>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="cpf-{{ $beneficiario->id }}">CPF</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-id-card"></i></span></div>
+                                                                <input type="text" id="cpf-{{ $beneficiario->id }}" name="cpf"
+                                                                    class="form-control cpf-mask"
+                                                                    value="{{ old('cpf', $beneficiario->cpf) }}" required>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="telefone-{{ $beneficiario->id }}">Telefone</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-phone"></i></span></div>
+                                                                <input type="text" id="telefone-{{ $beneficiario->id }}"
+                                                                    name="telefone" class="form-control phone-mask"
+                                                                    value="{{ old('telefone', $beneficiario->telefone) }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+
+                                                        <div class="form-group">
+                                                            <label for="endereco-{{ $beneficiario->id }}">Endereço</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-map-marker-alt"></i></span></div>
+                                                                <input type="text" id="endereco-{{ $beneficiario->id }}"
+                                                                    name="endereco" class="form-control"
+                                                                    value="{{ old('endereco', optional($beneficiario->endereco)->logradouro) }}"
+                                                                    placeholder="Endereço completo">
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label
+                                                                for="escolaridade-{{ $beneficiario->id }}">Escolaridade</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-graduation-cap"></i></span></div>
+                                                                <select id="escolaridade-{{ $beneficiario->id }}"
+                                                                    name="escolaridade" class="form-control">
+                                                                    <option value="">Selecione...</option>
+
+                                                                    <option value="Fundamental Incompleto" {{ old('escolaridade', $beneficiario->escolaridade) == 'Fundamental Incompleto' ? 'selected' : '' }}>Fundamental Incompleto</option>
+                                                                    <option value="Fundamental Completo" {{ old('escolaridade', $beneficiario->escolaridade) == 'Fundamental Completo' ? 'selected' : '' }}>Fundamental Completo</option>
+                                                                    <option value="Médio Incompleto" {{ old('escolaridade', $beneficiario->escolaridade) == 'Médio Incompleto' ? 'selected' : '' }}>Médio Incompleto</option>
+                                                                    <option value="Médio Completo" {{ old('escolaridade', $beneficiario->escolaridade) == 'Médio Completo' ? 'selected' : '' }}>Médio Completo</option>
+                                                                    <option value="Superior Incompleto" {{ old('escolaridade', $beneficiario->escolaridade) == 'Superior Incompleto' ? 'selected' : '' }}>Superior Incompleto</option>
+                                                                    <option value="Superior Completo" {{ old('escolaridade', $beneficiario->escolaridade) == 'Superior Completo' ? 'selected' : '' }}>Superior Completo</option>
+                                                                    <option value="Pós-graduação" {{ old('escolaridade', $beneficiario->escolaridade) == 'Pós-graduação' ? 'selected' : '' }}>Pós-graduação</option>
+                                                                    <option value="Analfabeto" {{ old('escolaridade', $beneficiario->escolaridade) == 'Analfabeto' ? 'selected' : '' }}>Analfabeto</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group">
+                                                            <label for="cadunico-{{ $beneficiario->id }}">Número do
+                                                                CadÚnico</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend"><span
+                                                                        class="input-group-text"><i
+                                                                            class="fas fa-file-alt"></i></span></div>
+                                                                <input type="text" id="cadunico-{{ $beneficiario->id }}"
+                                                                    name="cadunico" class="form-control"
+                                                                    value="{{ old('cadunico', $beneficiario->cadunico) }}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label><i class="fas fa-wheelchair mr-1"></i> Limitações</label>
+                                                    @php
+                                                        $limitacoes_salvas = old('limitacoes', json_decode($beneficiario->limitacoes, true) ?? []);
+                                                    @endphp
+                                                    <div class="border p-3 rounded">
+                                                        <div class="row">
+                                                            <div class="col-md-3">
+                                                                <div class="custom-control custom-checkbox">
+
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="cognitiva-{{ $beneficiario->id }}"
+                                                                        name="limitacoes[]" value="Cognitiva" {{ is_array($limitacoes_salvas) && in_array('Cognitiva', $limitacoes_salvas) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label"
+                                                                        for="cognitiva-{{ $beneficiario->id }}">Cognitiva</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="locomocao-{{ $beneficiario->id }}"
+                                                                        name="limitacoes[]" value="Locomoção" {{ is_array($limitacoes_salvas) && in_array('Locomoção', $limitacoes_salvas) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label"
+                                                                        for="locomocao-{{ $beneficiario->id }}">Locomoção</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="visao-{{ $beneficiario->id }}" name="limitacoes[]"
+                                                                        value="Visão" {{ is_array($limitacoes_salvas) && in_array('Visão', $limitacoes_salvas) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label"
+                                                                        for="visao-{{ $beneficiario->id }}">Visão</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input"
+                                                                        id="audicao-{{ $beneficiario->id }}" name="limitacoes[]"
+                                                                        value="Audição" {{ is_array($limitacoes_salvas) && in_array('Audição', $limitacoes_salvas) ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label"
+                                                                        for="audicao-{{ $beneficiario->id }}">Audição</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mt-2">
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <div class="input-group-prepend"><span
+                                                                            class="input-group-text">Outras</span></div>
+                                                                    <input type="text" class="form-control"
+                                                                        name="outras_limitacoes"
+                                                                        value="{{ old('outras_limitacoes', $beneficiario->outras_limitacoes) }}"
+                                                                        placeholder="Especifique outras limitações">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="observacoes-{{ $beneficiario->id }}"><i
+                                                            class="fas fa-comment-dots mr-1"></i> Observações</label>
+                                                    <textarea id="observacoes-{{ $beneficiario->id }}" name="observacoes"
+                                                        class="form-control"
+                                                        rows="3">{{ old('observacoes', $beneficiario->observacoes) }}</textarea>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i
+                                                        class="fas fa-times mr-1"></i> Cancelar</button>
+                                                <button type="submit" class="btn btn-success"><i class="fas fa-save mr-1"></i>
+                                                    Salvar Alterações</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>João Oliveira Pereira</td>
-                            <td>987.654.321-00</td>
-                            <td>45 anos</td>
-                            <td>Rio de Janeiro/RJ</td>
-                            <td>22/05/2021</td>
-                            <td><span class="badge badge-success">Ativo</span></td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-info" title="Visualizar completo">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button data-toggle="modal" data-target="#modalCadastroBeneficiario"
-                                        class="btn btn-warning" title="Editar cadastro">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-danger" title="Inativar beneficiário">
-                                        <i class="fas fa-user-times"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Ana Paula Costa</td>
-                            <td>456.789.123-45</td>
-                            <td>28 anos</td>
-                            <td>Belo Horizonte/MG</td>
-                            <td>10/01/2023</td>
-                            <td><span class="badge badge-warning">Pendente</span></td>
-                            <td class="text-center">
-                                <div class="btn-group btn-group-sm">
-                                    <button class="btn btn-info" title="Visualizar completo">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button data-toggle="modal" data-target="#modalCadastroBeneficiario"
-                                        class="btn btn-warning" title="Editar cadastro">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-success" title="Aprovar cadastro">
-                                        <i class="fas fa-user-check"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                            </div>
+
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -163,14 +367,17 @@
                 </div>
             </div>
         </div>
-        <!-- /.card-body -->
         <div class="card-footer text-muted small">
             <div class="row">
                 <div class="col-md-6">
-                    <i class="fas fa-info-circle mr-1"></i> Última atualização: 02/06/2023
+                    <i class="fas fa-info-circle mr-1"></i>
+
+                    @if(isset($ultimaAtualizacao))
+                        Última atualização: <strong>{{ $ultimaAtualizacao->format('d/m/Y') }}</strong>
+                    @endif
                 </div>
                 <div class="col-md-6 text-right">
-                    Total de ativos: <strong>118</strong> | Inativos: <strong>7</strong>
+                    Total de ativos: <strong>{{ $totalAtivos }}</strong> | Inativos: <strong>{{ $totalInativos }}</strong>
                 </div>
             </div>
         </div>

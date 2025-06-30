@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiario;
 use Illuminate\Http\Request;
 
 class BeneficiarioController extends Controller
@@ -23,25 +24,91 @@ class BeneficiarioController extends Controller
      */
     public function index()
     {
-        return view('beneficiario');
+        $beneficiarios = Beneficiario::with(['endereco.cidade.estado'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalAtivos = $beneficiarios->where('status', 'ativo')->count();
+        $totalInativos = $beneficiarios->where('status', 'inativo')->count();
+
+        $ultimaAtualizacao = $beneficiarios->isNotEmpty() ? $beneficiarios->max('updated_at') : now();
+
+        return view('beneficiario', compact(
+            'beneficiarios',
+            'totalAtivos',
+            'totalInativos',
+            'ultimaAtualizacao'
+        ));
     }
 
-    public function consulta()
-    {
-        return view('beneficiario-consulta');
-    }
+    // cadastro.beneficiario
 
     public function store(Request $request)
     {
-        // Validate and process the request data
-        $data = $request->validate([
+        $validated = $request->validate([
             'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:14',
+            'cpf' => 'required|string|max:14|unique:beneficiarios',
             'data_nascimento' => 'required|date',
-            // Add other fields as necessary
+            'telefone' => 'nullable|string|max:20',
+            'escolaridade' => 'nullable|string',
+            'cadunico' => 'nullable|string',
+            'limitacoes' => 'nullable|array',
+            'outras_limitacoes' => 'nullable|string',
+            'observacoes' => 'nullable|string',
+            'endereco_id' => 'nullable|exists:enderecos,id'
         ]);
 
+        $beneficiario = Beneficiario::create($validated);
 
-        return redirect()->route('cadastro.beneficiario')->with('success', 'Beneficiário cadastrado com sucesso!');
+        return redirect()->route('cadastro.beneficiario')
+            ->with('success', 'Beneficiário cadastrado com sucesso!');
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $beneficiario = Beneficiario::findOrFail($id);
+
+        $validated = $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|max:14|unique:beneficiarios,cpf,' . $beneficiario->id,
+            'data_nascimento' => 'required|date',
+            'telefone' => 'nullable|string|max:20',
+            'escolaridade' => 'nullable|string',
+            'cadunico' => 'nullable|string',
+            'limitacoes' => 'nullable|array',
+            'outras_limitacoes' => 'nullable|string',
+            'observacoes' => 'nullable|string',
+            'endereco_id' => 'nullable|exists:enderecos,id'
+        ]);
+
+        $validated['limitacoes'] = json_encode($request->limitacoes);
+
+        $beneficiario->update($validated);
+
+        return redirect()->back()->with('success', 'Beneficiário atualizado com sucesso!');
+    }
+
+    public function toggleStatus($id)
+    {
+        $beneficiario = Beneficiario::findOrFail($id);
+
+        $novoStatus = $beneficiario->status == 'ativo' ? 'inativo' : 'ativo';
+
+        $beneficiario->status = $novoStatus;
+        $beneficiario->save();
+
+        $mensagem = "Beneficiário " . ($novoStatus == 'ativo' ? 'ativado' : 'inativado') . " com sucesso!";
+
+        return redirect()->back()->with('success', $mensagem);
+    }
+
+    public function destroy($id)
+    {
+        $beneficiario = Beneficiario::findOrFail($id);
+        $beneficiario->delete();
+
+        return redirect()->route('cadastro.beneficiario')
+            ->with('success', 'Beneficiário excluído com sucesso!');
     }
 }
