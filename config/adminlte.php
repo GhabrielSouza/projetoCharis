@@ -322,11 +322,6 @@ return [
             'icon' => 'fas fa-user-plus',
         ],
         [
-            'text' => 'Consulta de Beneficiário',
-            'url' => '/consulta/beneficiario',
-            'icon' => 'fas fa-search',
-        ],
-        [
             'text' => 'Cadastro de Profissional',
             'url' => '/profissional',
             'icon' => 'fas fa-user-md',
@@ -537,9 +532,14 @@ return [
             'active' => true,
             'files' => [
                 [
+                    'type' => 'css',
+                    'asset' => false,
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css',
+                ],
+                [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],

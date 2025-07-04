@@ -45,23 +45,35 @@ class BeneficiarioController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required|string|max:14|unique:beneficiarios',
-            'data_nascimento' => 'required|date',
-            'telefone' => 'nullable|string|max:20',
-            'escolaridade' => 'nullable|string',
-            'cadunico' => 'nullable|string',
-            'limitacoes' => 'nullable|array',
-            'outras_limitacoes' => 'nullable|string',
-            'observacoes' => 'nullable|string',
-            'endereco_id' => 'nullable|exists:enderecos,id'
-        ]);
+        try {
+            $validated = $request->validate([
+                'nome' => 'required|string|max:255',
+                'cpf' => 'required|string|max:14|unique:beneficiarios',
+                'data_nascimento' => 'required|date',
+                'telefone' => 'nullable|string|max:20',
+                'escolaridade' => 'nullable|string',
+                'cadunico' => 'nullable|string',
+                'limitacoes' => 'nullable|array',
+                'outras_limitacoes' => 'nullable|string',
+                'observacoes' => 'nullable|string',
+                'endereco_id' => 'nullable|exists:enderecos,id'
+            ]);
 
-        $beneficiario = Beneficiario::create($validated);
+            // // Verificação adicional de CPF
+            // if (Beneficiario::where('cpf', $validated['cpf'])->exists()) {
+            //     throw new \Exception('CPF já cadastrado no sistema.');
+            // }
 
-        return redirect()->route('cadastro.beneficiario')
-            ->with('success', 'Beneficiário cadastrado com sucesso!');
+            $beneficiario = Beneficiario::create($validated);
+
+            return redirect()->route('cadastro.beneficiario')
+                ->with('success', 'Beneficiário cadastrado com sucesso!');
+
+        } catch (\Exception $e) {
+            return back()
+                ->with('error', 'Erro ao cadastrar beneficiário: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function update(Request $request, $id)

@@ -257,7 +257,7 @@
                                                 <div class="form-group">
                                                     <label><i class="fas fa-wheelchair mr-1"></i> Limitações</label>
                                                     @php
-                                                        $limitacoes_salvas = old('limitacoes', json_decode($beneficiario->limitacoes, true) ?? []);
+    $limitacoes_salvas = old('limitacoes', json_decode($beneficiario->limitacoes, true) ?? []);
                                                     @endphp
                                                     <div class="border p-3 rounded">
                                                         <div class="row">
@@ -575,35 +575,46 @@
 @endsection
 
 @section('js')
-    <!-- Mensagem de sucesso ao voltar da rota -->
-    @if(session('success'))
+        <!-- Mensagem de sucesso ao voltar da rota -->
+        @if(session('success'))
+            <script>
+                Swal.fire({
+                    title: 'Sucesso!',
+                    icon: "success",
+                    text: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            </script>
+        @endif
+
+        @if(session('error'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'Entendi'
+                });
+            </script>
+        @endif
+
         <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 2000
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.getElementById('formCadastroBeneficiario');
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        Swal.fire({
+                            title: 'Salvando...',
+                            text: 'Por favor, aguarde.',
+
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    });
+                }
             });
         </script>
-    @endif
-
-    <!-- Loading ao enviar formulário -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('formCadastroBeneficiario');
-            if (form) {
-                form.addEventListener('submit', function (e) {
-                    Swal.fire({
-                        title: 'Salvando...',
-                        text: 'Por favor, aguarde.',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-                });
-            }
-        });
-    </script>
 @endsection

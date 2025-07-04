@@ -16,7 +16,6 @@ Route::get('/beneficiario', [App\Http\Controllers\BeneficiarioController::class,
 Route::post("/beneficiario", [App\Http\Controllers\BeneficiarioController::class, 'store'])->name('beneficiarios.store');
 Route::post('beneficiarios/{id}/toggle-status', [App\Http\Controllers\BeneficiarioController::class, 'toggleStatus'])->name('beneficiarios.toggleStatus');
 Route::put('/beneficiarios/{id}', [BeneficiarioController::class, 'update'])->name('beneficiarios.update');
-Route::get('/consulta/beneficiario', [App\Http\Controllers\BeneficiarioController::class, 'consulta'])->name('consulta.beneficiario');
 Route::delete('/beneficiario/{id}', [App\Http\Controllers\BeneficiarioController::class, 'destroy'])->name('beneficiarios.destroy');
 
 
