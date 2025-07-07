@@ -73,7 +73,7 @@ class BeneficiarioController extends Controller
 
         } catch (\Exception $e) {
             return back()
-                ->with('error', 'Erro ao cadastrar beneficiário: ' . $e->getMessage())
+                ->withErrors(['cpf' => 'Erro ao cadastrar beneficiário'])
                 ->withInput();
         }
     }

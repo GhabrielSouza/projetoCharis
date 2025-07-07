@@ -57,7 +57,7 @@
                             placeholder="000.000.000-00" value="{{ old('cpf') }}" required>
                     </div>
                     @error('cpf')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                     @enderror
                 </div>
 
