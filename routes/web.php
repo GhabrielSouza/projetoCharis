@@ -21,3 +21,5 @@ Route::delete('/beneficiario/{id}', [App\Http\Controllers\BeneficiarioController
 
 Route::get('/profissional', [App\Http\Controllers\ProfissionalController::class, 'index'])->name('cadastro.profissional');
 Route::post("/profissional", [App\Http\Controllers\ProfissionalController::class, 'store'])->name('profissionais.store');
+Route::post('profissional/{id}/toggle-status', [App\Http\Controllers\ProfissionalController::class, 'toggleStatus'])->name('profissional.toggleStatus');
+Route::put("/profissional/{id}", [App\Http\Controllers\ProfissionalController::class, 'update'])->name('profissionais.update');

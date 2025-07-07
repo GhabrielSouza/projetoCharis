@@ -24,9 +24,16 @@ class BeneficiarioController extends Controller
      */
     public function index()
     {
-        $beneficiarios = Beneficiario::with(['endereco.cidade.estado'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        // $beneficiarios = Beneficiario::with(['endereco.cidade.estado'])
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+
+        $beneficiarios = Beneficiario::query()
+            ->when(request('search'), function ($query) {
+                return $query->buscar(request('search'));
+            })
+            ->orderBy('nome')
+            ->paginate(10);
 
         $totalAtivos = $beneficiarios->where('status', 'ativo')->count();
         $totalInativos = $beneficiarios->where('status', 'inativo')->count();
@@ -58,11 +65,6 @@ class BeneficiarioController extends Controller
                 'observacoes' => 'nullable|string',
                 'endereco_id' => 'nullable|exists:enderecos,id'
             ]);
-
-            // // Verificação adicional de CPF
-            // if (Beneficiario::where('cpf', $validated['cpf'])->exists()) {
-            //     throw new \Exception('CPF já cadastrado no sistema.');
-            // }
 
             $beneficiario = Beneficiario::create($validated);
 
