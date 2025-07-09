@@ -41,7 +41,7 @@
                             value="{{ old('data_nascimento') }}" required>
                     </div>
                     @error('data_nascimento')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <span class="invalid-feedback" role="alert">{{ $message }}</span>
                     @enderror
                 </div>
 

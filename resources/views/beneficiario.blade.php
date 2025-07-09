@@ -188,7 +188,7 @@
     </div>
 @endsection
 
-@section('js')
+<!-- @section('js')
     @if(session('success'))
         <script>
             Swal.fire({
@@ -253,6 +253,74 @@
                         Swal.showLoading();
                     }
                 });
+            });
+        });
+    </script>
+@endsection -->
+
+@section('js')
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Sucesso!',
+                icon: "success",
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'Entendi'
+                });
+            }, 500);
+        </script>
+    @endif
+
+    <script>
+        $(document).ready(function () {
+            @if ($errors->any() && (old('nome') || old('cpf')))
+                console.log('Reabrindo modal de cadastro com erros...');
+                $('#modalCadastroBeneficiario').modal('show');
+            @endif
+
+                @if ($errors->any() && session('beneficiario_id_com_erro'))
+                    let beneficiarioIdComErro = "{{ session('beneficiario_id_com_erro') }}";
+                    console.log('Reabrindo modal de edição com erros para o ID:', beneficiarioIdComErro);
+                    $('#modalEditarBeneficiario-' + beneficiarioIdComErro).modal('show');
+                @endif
+
+            $('#formCadastroBeneficiario').on('submit', function () {
+                Swal.fire({
+                    title: 'Salvando...',
+                    text: 'Por favor, aguarde.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+
+            $('form[id^="formEdicaoBeneficiario-"]').on('submit', function () {
+                Swal.fire({
+                    title: 'Salvando Alterações...',
+                    text: 'Por favor, aguarde.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            });
+
+            $('.modal').on('shown.bs.modal', function () {
+                $(this).find('.modal-body').scrollTop(0);
             });
         });
     </script>
