@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Beneficiario;
+use App\Models\Cidade;
 use Illuminate\Http\Request;
 
 class BeneficiarioController extends Controller
@@ -40,11 +41,16 @@ class BeneficiarioController extends Controller
 
         $ultimaAtualizacao = $beneficiarios->isNotEmpty() ? $beneficiarios->max('updated_at') : now();
 
+        $cidades = Cidade::orderBy('nome')->get();
+
+
+
         return view('beneficiario', compact(
             'beneficiarios',
             'totalAtivos',
             'totalInativos',
-            'ultimaAtualizacao'
+            'ultimaAtualizacao',
+            'cidades'
         ));
     }
 
@@ -62,7 +68,12 @@ class BeneficiarioController extends Controller
             'limitacoes' => 'nullable|array',
             'outras_limitacoes' => 'nullable|string',
             'observacoes' => 'nullable|string',
-            'endereco_id' => 'nullable|exists:enderecos,id'
+            'endereco_logradouro' => 'nullable|string|max:255',
+            'endereco_numero' => 'nullable|string|max:20',
+            'endereco_complemento' => 'nullable|string|max:100',
+            'endereco_bairro' => 'nullable|string|max:100',
+            'cidade_id' => 'required|exists:cidades,id',
+            'cep' => 'nullable|string|max:10',
         ]);
 
         try {
@@ -93,7 +104,12 @@ class BeneficiarioController extends Controller
             'limitacoes' => 'nullable|array',
             'outras_limitacoes' => 'nullable|string',
             'observacoes' => 'nullable|string',
-            'endereco_id' => 'nullable|exists:enderecos,id'
+            'endereco_logradouro ' => 'nullable|string|max:255',
+            'endereco_numero' => 'nullable|string|max:20',
+            'endereco_complemento' => 'nullable|string|max:100',
+            'endereco_bairro' => 'nullable|string|max:100',
+            'cidade_id' => 'required|exists:cidades,id',
+            'cep' => 'nullable|string|max:10',
         ]);
 
         try {

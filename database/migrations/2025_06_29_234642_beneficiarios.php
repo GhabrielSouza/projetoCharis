@@ -17,7 +17,12 @@ return new class extends Migration {
             $table->string('telefone', 20)->nullable();
 
             // Relacionamento com endereço
-            $table->foreignId('endereco_id')->nullable()->constrained('enderecos');
+            $table->string('endereco_logradouro', 255);
+            $table->string('endereco_numero', 20);
+            $table->string('endereco_complemento', 100)->nullable();
+            $table->string('endereco_bairro', 100);
+            $table->foreignId('cidade_id')->constrained('cidades')->onDelete('restrict');
+            $table->string('cep', 10);
 
             // Escolaridade e cadastro
             $table->string('escolaridade')->nullable();

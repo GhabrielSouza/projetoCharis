@@ -1,4 +1,3 @@
-
 <form id="formCadastroBeneficiario" action="{{ route('beneficiarios.store') }}" method="POST">
     @csrf
     <div class="modal-header bg-orange text-white">
@@ -21,8 +20,8 @@
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                         </div>
                         <input type="text" id="nome" name="nome"
-                            class="form-control @error('nome') is-invalid @enderror"
-                            placeholder="Nome completo" value="{{ old('nome') }}" required>
+                            class="form-control @error('nome') is-invalid @enderror" placeholder="Nome completo"
+                            value="{{ old('nome') }}" required>
                     </div>
                     @error('nome')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -76,26 +75,8 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
 
-            <div class="col-md-6">
-                {{-- Endereço --}}
-                <div class="form-group">
-                    <label for="endereco">Endereço</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
-                        </div>
-                        <input type="text" id="endereco" name="endereco"
-                            class="form-control @error('endereco') is-invalid @enderror"
-                            placeholder="Endereço completo" value="{{ old('endereco') }}">
-                    </div>
-                    @error('endereco')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                {{-- Escolaridade --}}
+                 {{-- Escolaridade --}}
                 <div class="form-group">
                     <label for="escolaridade">Escolaridade</label>
                     <div class="input-group">
@@ -111,8 +92,10 @@
                             <option value="Médio Completo" {{ old('escolaridade') == 'Médio Completo' ? 'selected' : '' }}>Médio Completo</option>
                             <option value="Superior Incompleto" {{ old('escolaridade') == 'Superior Incompleto' ? 'selected' : '' }}>Superior Incompleto</option>
                             <option value="Superior Completo" {{ old('escolaridade') == 'Superior Completo' ? 'selected' : '' }}>Superior Completo</option>
-                            <option value="Pós-graduação" {{ old('escolaridade') == 'Pós-graduação' ? 'selected' : '' }}>Pós-graduação</option>
-                            <option value="Analfabeto" {{ old('escolaridade') == 'Analfabeto' ? 'selected' : '' }}>Analfabeto</option>
+                            <option value="Pós-graduação" {{ old('escolaridade') == 'Pós-graduação' ? 'selected' : '' }}>
+                                Pós-graduação</option>
+                            <option value="Analfabeto" {{ old('escolaridade') == 'Analfabeto' ? 'selected' : '' }}>
+                                Analfabeto</option>
                         </select>
                     </div>
                     @error('escolaridade')
@@ -136,6 +119,113 @@
                     @enderror
                 </div>
             </div>
+
+            <div class="col-md-6">
+                {{-- Logradouro --}}
+                <div class="form-group">
+                    <label for="endereco_logradouro">Logradouro</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <input type="text" id="endereco_logradouro" name="endereco_logradouro"
+                            class="form-control @error('endereco_logradouro') is-invalid @enderror"
+                            placeholder="Rua, Avenida, etc." value="{{ old('endereco_logradouro') }}">
+                    </div>
+                    @error('endereco_logradouro')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Número --}}
+                <div class="form-group">
+                    <label for="endereco_numero">Número</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <input type="text" id="endereco_numero" name="endereco_numero"
+                            class="form-control @error('endereco_numero') is-invalid @enderror"
+                            placeholder="Número da residência" value="{{ old('endereco_numero') }}">
+                    </div>
+                    @error('endereco_numero')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Complemento --}}
+                <div class="form-group">
+                    <label for="endereco_complemento">Complemento</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <input type="text" id="endereco_complemento" name="endereco_complemento"
+                            class="form-control @error('endereco_complemento') is-invalid @enderror"
+                            placeholder="Endereço completo" value="{{ old('endereco_complemento') }}">
+                    </div>
+                    @error('endereco_complemento')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Bairro --}}
+                <div class="form-group">
+                    <label for="endereco_bairro">Bairro</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div>
+                        <input type="text" id="endereco_bairro" name="endereco_bairro"
+                            class="form-control @error('endereco_bairro') is-invalid @enderror"
+                            placeholder="Bairro" value="{{ old('endereco_bairro') }}">
+                    </div>
+                    @error('endereco_bairro')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Cidade --}}
+                <div class="form-group">
+                    <label for="cidade_id">Cidade</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-city"></i></span>
+                        </div>
+                        <select id="cidade_id" name="cidade_id"
+                            class="form-control @error('cidade_id') is-invalid @enderror">
+                            <option value="">Selecione...</option>
+                            @foreach ($cidades as $cidade)
+                                <option value="{{ $cidade->id }}" {{ old('cidade_id') == $cidade->id ? 'selected' : '' }}>
+                                    {{ $cidade->nome }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('cidade_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- CEP --}}
+                <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-pin"></i></span>
+                        </div>
+                        <input type="text" id="cep" name="cep"
+                            class="form-control cep-mask @error('cep') is-invalid @enderror"
+                            placeholder="00000-000" value="{{ old('cep') }}">
+                    </div>
+                    @error('cep')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+            </div>
+
         </div>
 
         <div class="row mt-3">
@@ -160,15 +250,15 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="visao"
-                                        name="limitacoes[]" value="Visão" {{ is_array(old('limitacoes')) && in_array('Visão', old('limitacoes')) ? 'checked' : '' }}>
+                                    <input type="checkbox" class="custom-control-input" id="visao" name="limitacoes[]"
+                                        value="Visão" {{ is_array(old('limitacoes')) && in_array('Visão', old('limitacoes')) ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="visao">Visão</label>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="audicao"
-                                        name="limitacoes[]" value="Audição" {{ is_array(old('limitacoes')) && in_array('Audição', old('limitacoes')) ? 'checked' : '' }}>
+                                    <input type="checkbox" class="custom-control-input" id="audicao" name="limitacoes[]"
+                                        value="Audição" {{ is_array(old('limitacoes')) && in_array('Audição', old('limitacoes')) ? 'checked' : '' }}>
                                     <label class="custom-control-label" for="audicao">Audição</label>
                                 </div>
                             </div>
@@ -179,8 +269,10 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Outras</span>
                                     </div>
-                                    <input type="text" class="form-control @error('outras_limitacoes') is-invalid @enderror" name="outras_limitacoes"
-                                        placeholder="Especifique outras limitações" value="{{ old('outras_limitacoes') }}">
+                                    <input type="text"
+                                        class="form-control @error('outras_limitacoes') is-invalid @enderror"
+                                        name="outras_limitacoes" placeholder="Especifique outras limitações"
+                                        value="{{ old('outras_limitacoes') }}">
                                 </div>
                                 @error('outras_limitacoes')
                                     <div class="invalid-feedback">{{ $message }}</div>

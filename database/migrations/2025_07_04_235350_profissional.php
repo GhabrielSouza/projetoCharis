@@ -22,7 +22,7 @@ return new class extends Migration {
 
             // Dados profissionais
             $table->string('numero_registro')->comment('CRM/COREN etc');
-            $table->string('area_atuacao');
+            $table->foreignId('area_atuacao_id')->constrained('areas_atuacao')->onDelete('restrict');
             $table->enum('perfil', ['Médico', 'Enfermeiro', 'Psicólogo', 'Assistente Social', 'Outro']);
 
             // Status e controle

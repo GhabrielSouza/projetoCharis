@@ -317,19 +317,24 @@ return [
             'can' => 'manage-blog',
         ],
         [
-            'text' => 'Cadastro de Beneficiário',
+            'text' => 'Beneficiários',
             'url' => '/beneficiario',
             'icon' => 'fas fa-user-plus',
         ],
         [
-            'text' => 'Cadastro de Profissional',
+            'text' => 'Profissionais',
             'url' => '/profissional',
             'icon' => 'fas fa-user-md',
         ],
         [
+            'text' => 'Registrar Atendimento',
+            'url' => 'admin/pages',
+            'icon' => 'fas fa-file-signature',
+        ],
+        [
             'text' => 'Relatórios',
             'url' => 'admin/pages',
-            'icon' => 'fas fa-file-alt',
+            'icon' => 'fas fa-file-download',
         ],
         ['header' => 'account_settings'],
         [

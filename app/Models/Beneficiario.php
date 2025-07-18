@@ -15,7 +15,12 @@ class Beneficiario extends Model
         'data_nascimento',
         'cpf',
         'telefone',
-        'endereco_id',
+        'endereco_logradouro',
+        'endereco_numero',
+        'endereco_complemento',
+        'endereco_bairro',
+        'cidade_id',
+        'cep',
         'escolaridade',
         'cadunico',
         'limitacoes',
@@ -29,20 +34,29 @@ class Beneficiario extends Model
         'data_nascimento' => 'date'
     ];
 
-    public function endereco(): BelongsTo
-    {
-        return $this->belongsTo(Endereco::class);
-    }
+    protected $dates = ['data_nascimento', 'data_cadastro'];
 
-    // Método para acessar a cidade através do endereço
+    // Relacionamento: Um Beneficiário pertence a uma Cidade
     public function cidade()
     {
-        return $this->endereco?->cidade;
+        return $this->belongsTo(Cidade::class);
     }
 
-    // Método para acessar o estado através do endereço->cidade
-    public function estado()
+    // Relacionamento: Um Beneficiário tem muitos Agendamentos
+    public function agendamentos()
     {
-        return $this->endereco?->cidade?->estado;
+        return $this->hasMany(Agendamento::class);
+    }
+
+    // Relacionamento: Um Beneficiário tem muitos AtendimentosRealizados
+    public function atendimentosRealizados()
+    {
+        return $this->hasMany(AtendimentoRealizado::class);
+    }
+
+    // Relacionamento: Um Beneficiário tem muitas CestasBasicasEntregues
+    public function cestasBasicasEntregues()
+    {
+        return $this->hasMany(CestaBasicaEntregue::class);
     }
 }

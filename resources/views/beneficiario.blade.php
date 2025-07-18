@@ -98,6 +98,12 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
 
+                                        <button data-toggle="modal"
+                                            data-target="#modalEditarBeneficiario-{{ $beneficiario->id }}"
+                                            class="btn btn-primary" title="Registro de Cesta Básica">
+                                            <i class="fas fa-shopping-basket"></i>
+                                        </button>
+
                                         <form action="{{ route('beneficiarios.toggleStatus', $beneficiario->id) }}"
                                             method="POST" style="display: inline;">
                                             @csrf

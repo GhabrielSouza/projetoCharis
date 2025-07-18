@@ -80,25 +80,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="form-group">
-                    <label for="endereco-{{ $beneficiario->id }}">Endereço</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend"><span class="input-group-text"><i
-                                    class="fas fa-map-marker-alt"></i></span></div>
-                        <input type="text" id="endereco-{{ $beneficiario->id }}" name="endereco"
-                            class="form-control @error('endereco') is-invalid @enderror"
-                            value="{{ old('endereco', optional($beneficiario->endereco)->logradouro) }}"
-                            placeholder="Endereço completo">
-                    </div>
-                    @error('endereco')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
 
                 <div class="form-group">
                     <label for="escolaridade-{{ $beneficiario->id }}">Escolaridade</label>
@@ -144,6 +125,101 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="form-group">
+                    <label for="endereco_logradouro-{{ $beneficiario->id }}">Logradouro</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-map-marker-alt"></i></span></div>
+                        <input type="text" id="endereco_logradouro-{{ $beneficiario->id }}" name="endereco_logradouro"
+                            class="form-control @error('endereco_logradouro') is-invalid @enderror"
+                            value="{{ old('endereco_logradouro', $beneficiario->endereco_logradouro) }}">
+                    </div>
+                    @error('endereco_logradouro')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+                <div class="form-group">
+                    <label for="endereco_numero-{{ $beneficiario->id }}">Número</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-hashtag"></i></span></div>
+                        <input type="text" id="endereco_numero-{{ $beneficiario->id }}" name="endereco_numero"
+                            class="form-control @error('endereco_numero') is-invalid @enderror"
+                            value="{{ old('endereco_numero', $beneficiario->endereco_numero) }}">
+                    </div>
+                    @error('endereco_numero')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco_complemento-{{ $beneficiario->id }}">Complemento</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-plus"></i></span></div>
+                        <input type="text" id="endereco_complemento-{{ $beneficiario->id }}" name="endereco_complemento"
+                            class="form-control @error('endereco_complemento') is-invalid @enderror"
+                            value="{{ old('endereco_complemento', $beneficiario->endereco_complemento) }}">
+                    </div>
+                    @error('endereco_complemento')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="endereco_bairro-{{ $beneficiario->id }}">Bairro</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-map-marker"></i></span></div>
+                        <input type="text" id="endereco_bairro-{{ $beneficiario->id }}" name="endereco_bairro"
+                            class="form-control @error('endereco_bairro') is-invalid @enderror"
+                            value="{{ old('endereco_bairro', $beneficiario->endereco_bairro) }}">
+                    </div>
+                    @error('endereco_bairro')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="cidade_id-{{ $beneficiario->id }}">Cidade</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-city"></i></span></div>
+                        <select id="cidade_id-{{ $beneficiario->id }}" name="cidade_id"
+                            class="form-control @error('cidade_id') is-invalid @enderror">
+                            <option value="">Selecione...</option>
+                            @foreach ($cidades as $cidade)
+                                <option value="{{ $cidade->id }}" {{ old('cidade_id', $beneficiario->cidade_id) == $cidade->id ? 'selected' : '' }}>
+                                    {{ $cidade->nome }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('cidade_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label for="cep-{{ $beneficiario->id }}">CEP</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend"><span class="input-group-text"><i
+                                    class="fas fa-envelope"></i></span></div>
+                        <input type="text" id="cep-{{ $beneficiario->id }}" name="cep"
+                            class="form-control cep-mask @error('cep') is-invalid @enderror"
+                            value="{{ old('cep', $beneficiario->cep) }}">
+                    </div>
+                    @error('cep')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
             </div>
         </div>
 
