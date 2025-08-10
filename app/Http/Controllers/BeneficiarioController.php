@@ -23,26 +23,27 @@ class BeneficiarioController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $beneficiarios = Beneficiario::with(['endereco.cidade.estado'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $search = $request->input('search');
 
-        $beneficiarios = Beneficiario::query()
-            ->when(request('search'), function ($query) {
-                return $query->buscar(request('search'));
-            })
-            ->orderBy('nome')
-            ->paginate(10);
+        $query = Beneficiario::query();
 
-        $totalAtivos = $beneficiarios->where('status', 'ativo')->count();
-        $totalInativos = $beneficiarios->where('status', 'inativo')->count();
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                    ->orWhere('cpf', 'like', "%{$search}%");
+            });
+        }
 
+        $beneficiarios = $query->orderBy('nome')->paginate(3);
+
+        $beneficiarios->appends(['search' => $search]);
+
+        $totalAtivos = Beneficiario::where('status', 'ativo')->count();
+        $totalInativos = Beneficiario::where('status', 'inativo')->count();
         $ultimaAtualizacao = $beneficiarios->isNotEmpty() ? $beneficiarios->max('updated_at') : now();
-
         $cidades = Cidade::orderBy('nome')->get();
-
 
 
         return view('beneficiario', compact(
@@ -54,7 +55,7 @@ class BeneficiarioController extends Controller
         ));
     }
 
-    // cadastro.beneficiario
+
 
     public function store(Request $request)
     {
@@ -144,7 +145,7 @@ class BeneficiarioController extends Controller
 
         $mensagem = "Beneficiário " . ($novoStatus == 'ativo' ? 'ativado' : 'inativado') . " com sucesso!";
 
-        return redirect()->back()->with('success', $mensagem);
+        return response()->json(['message' => $mensagem]);
     }
 
     public function destroy($id)

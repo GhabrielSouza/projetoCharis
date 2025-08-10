@@ -35,15 +35,19 @@
                         </button>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Pesquisar beneficiários..." id="searchInput">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" id="searchButton">
-                                <i class="fas fa-search"></i>
-                            </button>
+                <div class="col-md-6 d-flex justify-content-end">
+                    <form action="{{ route('beneficiarios.index') }}" method="GET" class="col-md-6">
+                        <div class="input-group">
+                            <input type="search" class="form-control" name="search"
+                                placeholder="Pesquisar por nome ou CPF..." id="searchInput"
+                                value="{{ request('search') ?? '' }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="submit" id="searchButton">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
 
@@ -105,7 +109,7 @@
                                         </button>
 
                                         <form action="{{ route('beneficiarios.toggleStatus', $beneficiario->id) }}"
-                                            method="POST" style="display: inline;">
+                                            method="POST" style="display: inline;" class="form-toggle-status">
                                             @csrf
 
                                             @if ($beneficiario->status == 'ativo')
@@ -125,7 +129,6 @@
                                 </td>
                             </tr>
 
-                            {{-- Modal de Edição (agora com include) --}}
                             <div class="modal fade" id="modalEditarBeneficiario-{{ $beneficiario->id }}" tabindex="-1"
                                 role="dialog" aria-labelledby="tituloModalEdicao-{{ $beneficiario->id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -142,28 +145,14 @@
 
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <div class="dataTables_info">
-                        Mostrando <strong>1</strong> a <strong>3</strong> de <strong>125</strong> beneficiários
+                    <div class="dataTables_info" role="status" aria-live="polite">
+                        Mostrando <strong>{{ $beneficiarios->firstItem() }}</strong> a
+                        <strong>{{ $beneficiarios->lastItem() }}</strong> de <strong>{{ $beneficiarios->total() }}</strong>
+                        resultados
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <ul class="pagination pagination-sm justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#"><i class="fas fa-angle-left"></i></a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"><i class="fas fa-angle-right"></i></a>
-                        </li>
-                    </ul>
+                <div class="col-md-6 d-flex justify-content-end">
+                    {{ $beneficiarios->links() }}
                 </div>
             </div>
         </div>
@@ -193,76 +182,6 @@
         </div>
     </div>
 @endsection
-
-<!-- @section('js')
-    @if(session('success'))
-        <script>
-            Swal.fire({
-                title: 'Sucesso!',
-                icon: "success",
-                text: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        </script>
-    @endif
-
-    @if(session('error'))
-        <script>
-            setTimeout(() => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro!',
-                    text: '{{ session('error') }}',
-                    confirmButtonText: 'Entendi'
-                });
-            }, 500);
-        </script>
-    @endif
-
-    <script>
-        $(document).ready(function () {
-            // Reabre modal de cadastro se tiver erro no cadastro
-            @if ($errors->any())
-                @if (old('nome') || old('cpf'))
-                    console.log('Reabrindo modal de cadastro...');
-                    $('#modalCadastroBeneficiario').modal('show');
-                @endif
-
-                    // Reabre modal de edição se veio com session ID
-                    @if (session('beneficiario_id_com_erro'))
-                        let id = "{{ session('beneficiario_id_com_erro') }}";
-                        console.log('Reabrindo modal de edição com ID:', id);
-                        $('#modalEditarBeneficiario-' + id).modal('show');
-                    @endif
-            @endif
-
-            // Loader para cadastro
-            $('#formCadastroBeneficiario').on('submit', function () {
-                Swal.fire({
-                    title: 'Salvando...',
-                    text: 'Por favor, aguarde.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            });
-
-            // Loader para edição
-            $('form[id^="formEdicaoBeneficiario-"]').on('submit', function () {
-                Swal.fire({
-                    title: 'Salvando Alterações...',
-                    text: 'Por favor, aguarde.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            });
-        });
-    </script>
-@endsection -->
 
 @section('js')
     @if(session('success'))
@@ -327,6 +246,48 @@
 
             $('.modal').on('shown.bs.modal', function () {
                 $(this).find('.modal-body').scrollTop(0);
+            });
+        });
+
+        $(document).ready(function () {
+
+            $('.form-toggle-status').on('submit', function (e) {
+                e.preventDefault();
+
+                const form = $(this);
+                const url = form.attr('action');
+                const button = form.find('button[type="submit"]');
+                const icon = button.find('i');
+                const originalIconClass = icon.attr('class');
+
+
+                button.prop('disabled', true);
+                icon.removeClass().addClass('fas fa-spinner fa-spin');
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: form.serialize(),
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Algo deu errado! Tente novamente.'
+                        });
+                        button.prop('disabled', false);
+                        icon.removeClass().addClass(originalIconClass);
+                    }
+                });
             });
         });
     </script>

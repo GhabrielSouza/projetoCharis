@@ -19,7 +19,7 @@ class Profissional extends Model
         'telefone',
         'email',
         'numero_registro',
-        'area_atuacao',
+        'area_atuacao_id',
         'perfil',
         'observacoes',
         'status'
