@@ -40,7 +40,7 @@
                             value="{{ old('data_nascimento') }}" required>
                     </div>
                     @error('data_nascimento')
-                        <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -53,10 +53,10 @@
                         </div>
                         <input type="text" id="cpf" name="cpf"
                             class="form-control cpf-mask @error('cpf') is-invalid @enderror"
-                            placeholder="000.000.000-00" value="{{ old('cpf') }}" required>
+                            placeholder="000.000.000-00" value="{{ old('cpf') }}" maxlength="14" required>
                     </div>
                     @error('cpf')
-                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -304,3 +304,5 @@
         </button>
     </div>
 </form>
+
+
