@@ -91,10 +91,12 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm">
-
-                                        <button class="btn btn-info" title="Visualizar completo">
+                                        <a href="{{ route('beneficiarios.perfil', $beneficiario) }}"
+                                            class="btn btn-info d-flex align-items-center justify-content-center"
+                                            title="Visualizar perfil">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
+
 
                                         <button data-toggle="modal"
                                             data-target="#modalEditarBeneficiario-{{ $beneficiario->id }}"

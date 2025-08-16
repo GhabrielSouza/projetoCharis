@@ -122,6 +122,13 @@ class ProfissionalController extends Controller
         return response()->json(['message' => $mensagem]);
     }
 
+    public function perfil(Profissional $profissional)
+    {
+        $profissional->load('areaAtuacao');
+
+        return view('profissional-perfil', compact('profissional'));
+    }
+
     public function destroy(Profissional $profissional)
     {
         $profissional->delete();

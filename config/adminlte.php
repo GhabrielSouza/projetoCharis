@@ -318,7 +318,7 @@ return [
         ],
         [
             'text' => 'Beneficiários',
-            'url' => '/beneficiario',
+            'url' => '/beneficiarios',
             'icon' => 'fas fa-user-plus',
         ],
         [

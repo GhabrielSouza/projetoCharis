@@ -26,7 +26,7 @@ class Profissional extends Model
     ];
 
 
-    protected $dates = ['data_nascimento']; // Para que o Eloquent trate como objeto Carbon
+    protected $dates = ['data_nascimento'];
 
     // Relacionamento: Um Profissional pertence a uma AreaAtuacao
     public function areaAtuacao()

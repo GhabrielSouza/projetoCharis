@@ -110,9 +110,12 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm">
-                                        <button class="btn btn-info" title="Ver perfil completo">
+                                        <a href="{{ route('profissionais.perfil', $profissional) }}"
+                                            class="btn btn-info d-flex align-items-center justify-content-center"
+                                            title="Visualizar perfil">
                                             <i class="fas fa-id-card"></i>
-                                        </button>
+                                        </a>
+
                                         <button data-toggle="modal" data-target="#editProfessionalModal-{{ $profissional->id }}"
                                             class="btn btn-warning" title="Editar cadastro">
                                             <i class="fas fa-user-edit"></i>

@@ -80,7 +80,7 @@ class BeneficiarioController extends Controller
         try {
             $beneficiario = Beneficiario::create($validated);
 
-            return redirect()->route('cadastro.beneficiario')
+            return redirect()->route('beneficiarios.index')
                 ->with('success', 'Beneficiário cadastrado com sucesso!');
 
         } catch (\Exception $e) {
@@ -146,6 +146,13 @@ class BeneficiarioController extends Controller
         $mensagem = "Beneficiário " . ($novoStatus == 'ativo' ? 'ativado' : 'inativado') . " com sucesso!";
 
         return response()->json(['message' => $mensagem]);
+    }
+
+    public function perfil(Beneficiario $beneficiario)
+    {
+        $beneficiario->load(['cidade', 'agendamentos', 'atendimentosRealizados', 'cestasBasicasEntregues']);
+
+        return view('beneficiario-perfil', compact('beneficiario'));
     }
 
     public function destroy($id)
