@@ -11,48 +11,19 @@
         <div class="card-header bg-orange text-white">
             <h3 class="card-title"><i class="fas fa-users mr-2"></i>Cadastro de Beneficiários</h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Recolher">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="maximize" title="Expandir">
-                    <i class="fas fa-expand"></i>
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
+                        title="Adicionar beneficiário">
+                        <i class="fas fa-user-plus mr-1"></i> Novo Beneficiario
+                    </button>
+                </div>
             </div>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="btn-group">
-                        <button class="btn btn-outline-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
-                            title="Adicionar beneficiário">
-                            <i class="fas fa-user-plus mr-1"></i> Novo
-                        </button>
-                        <button class="btn btn-outline-primary" title="Imprimir relatório">
-                            <i class="fas fa-print mr-1"></i> Imprimir
-                        </button>
-                        <button class="btn btn-outline-info" title="Exportar dados">
-                            <i class="fas fa-file-export mr-1"></i> Exportar
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex justify-content-end">
-                    <form action="{{ route('beneficiarios.index') }}" method="GET" class="col-md-6">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="search"
-                                placeholder="Pesquisar por nome ou CPF..." id="searchInput"
-                                value="{{ request('search') ?? '' }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-success" type="submit" id="searchButton">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
 
             <div class="table-responsive">
-                <table class="table table-hover table-striped">
+                <table id="beneficiariosTable" class="table table-hover table-striped">
                     <thead class="thead-light">
                         <tr>
                             <th>#</th>
@@ -73,8 +44,8 @@
                                 <td>{{ $beneficiario->cpf }}</td>
                                 <td>{{ \Carbon\Carbon::parse($beneficiario->data_nascimento)->age }} anos</td>
                                 <td>
-                                    @if($beneficiario->endereco && $beneficiario->endereco->cidade)
-                                        {{ $beneficiario->endereco->cidade->nome }}/{{ $beneficiario->endereco->cidade->estado->sigla }}
+                                    @if($beneficiario->cidade)
+                                        {{ $beneficiario->cidade->nome }}
                                     @else
                                         N/A
                                     @endif
@@ -104,8 +75,7 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
 
-                                        <button data-toggle="modal"
-                                            data-target="#modalEditarBeneficiario-{{ $beneficiario->id }}"
+                                        <button data-toggle="modal" data-target="#modalCadastroCestas-{{ $beneficiario->id }}"
                                             class="btn btn-primary" title="Registro de Cesta Básica">
                                             <i class="fas fa-shopping-basket"></i>
                                         </button>
@@ -136,6 +106,15 @@
                                 <div class="modal-dialog modal-lg" role="document">
                                     <div class="modal-content">
                                         @include('modal._form_edicao_beneficiario', ['beneficiario' => $beneficiario])
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="modalCadastroCestas-{{ $beneficiario->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="tituloModalCadastro-{{ $beneficiario->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        @include('modal._form_cadastro_cesta_basica', ['beneficiario' => $beneficiario])
                                     </div>
                                 </div>
                             </div>
@@ -291,6 +270,26 @@
                     }
                 });
             });
+        });
+
+        $(document).ready(function () {
+            var table = $('#beneficiariosTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
+                },
+                "order": [[0, "asc"], [1, "asc"]],
+                "pageLength": 10,
+                "lengthChange": false,
+                "searching": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf'
+                ]
+            });
+
         });
     </script>
 @endsection

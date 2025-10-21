@@ -3,13 +3,7 @@
 @section('title', 'Profissional')
 
 @section('content_header')
-
-<h1 class="d-flex justify-content-between align-items-center">
-    Perfil do Profissional
-    <span class="badge badge-{{ $profissional->status ? 'success' : 'secondary' }}">
-        {{ $profissional->status ? 'Ativo' : 'Inativo' }}
-    </span>
-</h1>
+<h1>Perfil do Profissional</h1>
 @stop
 
 @section('content')
@@ -79,7 +73,7 @@
                                         <span class="info-box-text">Último Atendimento</span>
                                         <span class="info-box-number">
                                             @if($profissional->atendimentosRealizados->last())
-                                                {{ $profissional->atendimentosRealizados->last()->data->format('d/m/Y') }}
+                                                {{ Carbon\Carbon::parse($profissional->atendimentosRealizados->last()->data)->format('d/m/Y') }}
                                             @else
                                                 N/A
                                             @endif
@@ -99,6 +93,43 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card card-outline card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-calendar-alt mr-2"></i>
+                            Agenda
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        @if($profissional->agendamentos->isEmpty())
+                            <div class="alert alert-info">
+                                Nenhum agendamento registrado para este profissional.
+                            </div>
+                        @else
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Data</th>
+                                            <th>Hora</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($profissional->agendamentos as $agendamento)
+                                            <tr>
+                                                <td>{{ \Carbon\Carbon::parse($agendamento->data_hora_agendamento)->format('d/m/Y') }}
+                                                </td>
+                                                <td>{{ \Carbon\Carbon::parse($agendamento->hora_registro)->format('H:i') }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

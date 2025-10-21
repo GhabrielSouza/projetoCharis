@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignId('profissional_id')->constrained('profissionais')->onDelete('restrict');
             $table->foreignId('area_atendimento_id')->constrained('areas_atuacao')->onDelete('restrict');
             $table->dateTime('data_hora_atendimento');
+            $table->string('hora_registro');
             $table->text('descricao_atendimento');
             $table->foreignId('agendamento_origem_id')->nullable()->unique()->constrained('agendamentos')->onDelete('set null');
             $table->timestamps();

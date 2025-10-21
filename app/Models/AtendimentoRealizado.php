@@ -19,6 +19,7 @@ class AtendimentoRealizado extends Model
         'area_atendimento_id',
         'data_hora_atendimento',
         'descricao_atendimento',
+        'hora_registro',
         'agendamento_origem_id',
     ];
 

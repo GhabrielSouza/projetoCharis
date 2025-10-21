@@ -7,54 +7,18 @@
 @stop
 
 @section('content')
-    <div class="card">
-        <div class="card-header bg-orange text-white">
-            <h3 class="card-title"><i class="fas fa-user-md mr-2"></i>Cadastro de Profissionais</h3>
+    <div class="card card-orange card-outline">
+        <div class="card-header ">
+            <h3 class="card-title "><i class="fas fa-user-md mr-2"></i>Cadastro de Profissionais</h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Recolher">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="maximize" title="Expandir">
-                    <i class="fas fa-expand"></i>
+                <button class="btn btn-sm btn-success" title="Adicionar profissional" data-toggle="modal"
+                    data-target="#addProfessionalModal">
+                    <i class="fas fa-user-plus mr-1"></i> Novo Profissional
                 </button>
             </div>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="btn-group">
-                        <button class="btn btn-outline-primary" title="Adicionar profissional" data-toggle="modal"
-                            data-target="#addProfessionalModal">
-                            <i class="fas fa-user-plus mr-1"></i> Novo Profissional
-                        </button>
-                        <button class="btn btn-outline-secondary" title="Filtrar profissionais">
-                            <i class="fas fa-filter mr-1"></i> Filtrar
-                        </button>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-file-export mr-1"></i> Exportar
-                            </button>
-                            <div class="dropdown-menu" id="exportDropdown">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex justify-content-end ">
-                    <form action="{{ route('profissionais.index') }}" method="GET">
-                        <div class="input-group">
-                            <input type="search" class="form-control" name="search"
-                                placeholder="Buscar por nome, registro ou especialidade..."
-                                value="{{ request('search') ?? '' }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+
 
             <div class="table-responsive">
                 <table id="professionalTable" class="table table-hover table-striped">
@@ -120,7 +84,8 @@
                                             class="btn btn-warning" title="Editar cadastro">
                                             <i class="fas fa-user-edit"></i>
                                         </button>
-                                        <button class="btn btn-secondary" title="Agendar">
+                                        <button class="btn btn-secondary" title="Agendar" data-toggle="modal"
+                                            data-target="#addAgendamentoModal-{{ $profissional->id }}">
                                             <i class="fas fa-calendar-plus"></i>
                                         </button>
                                         <form action="{{ route('profissional.toggleStatus', $profissional->id) }}" method="POST"
@@ -149,23 +114,18 @@
                                     @include('modal._form_edicao_profissional', ['profissional' => $profissional])
                                 </div>
                             </div>
+                            <div class="modal fade" id="addAgendamentoModal-{{ $profissional->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="addAgendamentoLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    @include('modal._form_cadastro_agendamento', ['profissional' => $profissional, 'beneficiarios', 'areas', 'horariosDisponiveis'])
+                                </div>
+                            </div>
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="dataTables_info" role="status" aria-live="polite">
-                        Mostrando <strong>{{ $profissionais->firstItem() ?? 0 }}</strong> a
-                        <strong>{{ $profissionais->lastItem() ?? 0 }}</strong> de
-                        <strong>{{ $profissionais->total() }}</strong> resultados
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex justify-content-end">
-                    {{ $profissionais->links() }}
-                </div>
-            </div>
+
         </div>
         <div class="card-footer text-muted small">
             <div class="row">
@@ -191,9 +151,14 @@
         </div>
     </div>
 
+
+
 @endsection
 
 @section('js')
+
+
+
     @if(session('success'))
         <script>
             Swal.fire({ title: 'Sucesso!', text: '{{ session('success') }}', icon: 'success', timer: 2500, showConfirmButton: false });
@@ -206,6 +171,9 @@
     @endif
 
     <script>
+
+
+
         $(document).ready(function () {
 
             @if ($errors->any())
@@ -311,6 +279,73 @@
                         icon.removeClass().addClass(originalIconClass);
                     }
                 });
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $('#professionalTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
+                },
+                "order": [[0, "asc"], [1, "asc"]],
+                "pageLength": 10,
+                "lengthChange": false,
+                "searching": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel', 'pdf'
+                ]
+            });
+
+        });
+
+        $('form[name="formCadastroAgendamento"]').on('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Salvando...',
+                html: 'Por favor, aguarde.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading() }
+            });
+
+            const form = $(this);
+            const url = form.attr('action');
+            const method = form.find('input[name="_method"]').val() || 'POST';
+
+            form.find('.is-invalid').removeClass('is-invalid');
+            $('.invalid-feedback').remove();
+            $.ajax({
+                url: url,
+                method: method,
+                data: form.serialize(),
+                success: function (response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: response.message || 'Operação realizada com sucesso!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function (xhr) {
+                    Swal.close();
+                    if (xhr.status === 422) {
+                        const errors = xhr.responseJSON.errors;
+                        for (const field in errors) {
+                            const input = form.find(`[name="${field}"]`);
+                            input.addClass('is-invalid');
+                            input.after(`<div class="invalid-feedback">${errors[field][0]}</div>`);
+                        }
+                        Swal.fire('Erro de Validação', 'Por favor, corrija os campos indicados.', 'error');
+                    } else {
+                        Swal.fire('Erro!', 'Ocorreu um erro inesperado. Tente novamente.', 'error');
+                    }
+                }
             });
         });
     </script>

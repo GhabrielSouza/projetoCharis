@@ -327,9 +327,14 @@ return [
             'icon' => 'fas fa-user-md',
         ],
         [
-            'text' => 'Registrar Atendimento',
-            'url' => 'admin/pages',
+            'text' => 'Gerenciar Atendimento',
+            'url' => '/atendimentos',
             'icon' => 'fas fa-file-signature',
+        ],
+        [
+            'text' => 'Gerenciar Cestas Básicas',
+            'url' => '/cestas',
+            'icon' => 'fas fa-shopping-basket',
         ],
         [
             'text' => 'Relatórios',

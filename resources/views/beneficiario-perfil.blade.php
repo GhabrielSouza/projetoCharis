@@ -92,7 +92,7 @@
                                         <span class="info-box-text">Último Atendimento</span>
                                         <span class="info-box-number">
                                             @if($beneficiario->atendimentosRealizados->last())
-                                                {{ $beneficiario->atendimentosRealizados->last()->data->format('d/m/Y') }}
+                                                {{ Carbon\Carbon::parse($beneficiario->atendimentosRealizados->last()->data_hora_atendimento)->format('d/m/Y') }}
                                             @else
                                                 N/A
                                             @endif
@@ -128,17 +128,18 @@
                                         <tr>
                                             <th>Data</th>
                                             <th>Profissional</th>
-                                            <th>Tipo</th>
+                                            <th>Área de atendimento</th>
                                             <th>Descrição</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($beneficiario->atendimentosRealizados->sortByDesc('data') as $atendimento)
                                             <tr>
-                                                <td>{{ $atendimento->data->format('d/m/Y H:i') }}</td>
-                                                <td>{{ $atendimento->profissional->nome ?? 'N/A' }}</td>
-                                                <td>{{ $atendimento->tipo }}</td>
-                                                <td>{{ Str::limit($atendimento->descricao, 100) }}</td>
+                                                <td>{{ Carbon\Carbon::parse($atendimento->data_hora_atendimento)->format('d/m/Y') }}
+                                                </td>
+                                                <td>{{ $atendimento->profissional_id ?? 'N/A' }}</td>
+                                                <td>{{ $atendimento->area_atendimento_id ?? 'N/A' }}</td>
+                                                <td>{{ Str::limit($atendimento->descricao_atendimento, 100) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -171,16 +172,16 @@
                                     <thead>
                                         <tr>
                                             <th>Data</th>
-                                            <th>Entregue por</th>
+                                            <th>Quantidade</th>
                                             <th>Observações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($beneficiario->cestasBasicasEntregues->sortByDesc('data_entrega') as $cesta)
                                             <tr>
-                                                <td>{{ $cesta->data_entrega->format('d/m/Y') }}</td>
-                                                <td>{{ $cesta->responsavel_entrega }}</td>
-                                                <td>{{ Str::limit($cesta->observacoes, 50) }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($cesta->data_entrega)->format('d/m/Y') }}</td>
+                                                <td>{{ $cesta->quantidade }}</td>
+                                                <td>{{ $cesta->observacoes ? Str::limit($cesta->observacoes, 50) : 'Nada a informar' }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -201,7 +202,7 @@
                         </h3>
                     </div>
                     <div class="card-body p-0">
-                        @if($beneficiario->agendamentos->where('data', '>=', now())->isEmpty())
+                        @if($beneficiario->agendamentos->where('data_hora_agendamento', '>=', now())->isEmpty())
                             <div class="alert alert-info m-3">
                                 Nenhum agendamento futuro para este beneficiário.
                             </div>
@@ -210,28 +211,21 @@
                                 <table class="table table-hover table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Data/Hora</th>
-                                            <th>Serviço</th>
+                                            <th>Data</th>
+                                            <th>Hora</th>
                                             <th>Status</th>
-                                            <th>Ações</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($beneficiario->agendamentos->where('data', '>=', now())->sortBy('data') as $agendamento)
+                                        @foreach($beneficiario->agendamentos->where('data_hora_agendamento', '>=', now())->sortBy('data_hora_agendamento') as $agendamento)
                                             <tr>
-                                                <td>{{ $agendamento->data->format('d/m/Y H:i') }}</td>
-                                                <td>{{ $agendamento->servico }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($agendamento->data_hora_agendamento)->format('d/m/Y') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($agendamento->hora_registro)->format('H:i') }}</td>
                                                 <td>
                                                     <span
-                                                        class="badge badge-{{ $agendamento->status == 'confirmado' ? 'success' : ($agendamento->status == 'pendente' ? 'warning' : 'danger') }}">
-                                                        {{ ucfirst($agendamento->status) }}
+                                                        class="badge badge-{{ $agendamento->status_agendamento == 'confirmado' ? 'success' : ($agendamento->status_agendamento == 'pendente' ? 'warning' : 'danger') }}">
+                                                        {{ ucfirst($agendamento->status_agendamento) }}
                                                     </span>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('agendamentos.show', $agendamento->id) }}"
-                                                        class="btn btn-sm btn-info">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -16,6 +16,7 @@ class Agendamento extends Model
         'profissional_id',
         'area_atendimento_id',
         'data_hora_agendamento',
+        'hora_registro',
         'observacoes_agendamento',
         'status_agendamento',
     ];

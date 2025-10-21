@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->foreignId('profissional_id')->constrained('profissionais')->onDelete('restrict');
             $table->foreignId('area_atendimento_id')->constrained('areas_atuacao')->onDelete('restrict');
             $table->dateTime('data_hora_agendamento');
+            $table->string('hora_registro');
             $table->text('observacoes_agendamento')->nullable();
             $table->string('status_agendamento', 50);
             $table->enum('agendamento', ['Agendado', 'Confirmado', 'Cancelado', 'Realizado'])

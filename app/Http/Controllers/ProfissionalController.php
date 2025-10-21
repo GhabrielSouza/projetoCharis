@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beneficiario;
 use Illuminate\Http\Request;
 use App\Models\Profissional;
 use App\Models\AreaAtucao;
+use Carbon\CarbonPeriod;
 
 class ProfissionalController extends Controller
 {
@@ -26,6 +28,15 @@ class ProfissionalController extends Controller
     public function index(Request $request)
     {
 
+        $inicio = '08:00';
+        $fim = '19:00';
+
+        $periodo = CarbonPeriod::create("today $inicio", '30 minutes', "today $fim");
+        $horariosDisponiveis = [];
+        foreach ($periodo as $hora) {
+            $horariosDisponiveis[] = $hora->format('H:i');
+        }
+
         $search = $request->input('search');
 
         $query = Profissional::query();
@@ -43,13 +54,14 @@ class ProfissionalController extends Controller
         $profissionais->appends(['search' => $search]);
 
         $areas = AreaAtucao::orderBy('nome_area')->get();
+        $beneficiarios = Beneficiario::orderBy('nome')->get();
 
         $totalAtivos = $profissionais->where('status', 'ativo')->count();
         $totalInativos = $profissionais->where('status', 'inativo')->count();
 
         $ultimaAtualizacao = $profissionais->isNotEmpty() ? $profissionais->max('updated_at') : now();
 
-        return view('profissional', compact('profissionais', 'totalAtivos', 'totalInativos', 'ultimaAtualizacao', 'areas'));
+        return view('profissional', compact('profissionais', 'totalAtivos', 'totalInativos', 'ultimaAtualizacao', 'areas', 'beneficiarios', 'horariosDisponiveis'));
     }
 
 
