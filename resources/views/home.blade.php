@@ -10,68 +10,54 @@
 <div class="row">
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box">
-            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
+                <span class="info-box-text">Beneficiários Cadastrados</span>
                 <span class="info-box-number">
-                    10
-                    <small>%</small>
+                    {{ $beneficiariosCount }}
                 </span>
             </div>
-            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box -->
     </div>
-    <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-tie"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Likes</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-text">Profissionais Cadastrados</span>
+                <span class="info-box-number">{{ $profissionaisCount }}</span>
             </div>
-            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box -->
     </div>
-    <!-- /.col -->
 
-    <!-- fix for small devices only -->
     <div class="clearfix hidden-md-up"></div>
 
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-basket"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Sales</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">Cestas Entregues</span>
+                <span class="info-box-number">{{ $cestasCount }}</span>
             </div>
-            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box -->
     </div>
-    <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3">
-            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-clock"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">New Members</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">Atendimentos Realizados</span>
+                <span class="info-box-number">{{ $atendimentosCount }}</span>
             </div>
-            <!-- /.info-box-content -->
         </div>
-        <!-- /.info-box -->
     </div>
-    <!-- /.col -->
 </div>
 
 <div class="row">
     <div class="col-12 col-md-6">
-        <div class="card card-danger">
+        <div class="card card-success">
             <div class="card-header">
                 <h3 class="card-title">Beneficiarios cadastrados</h3>
 
@@ -98,7 +84,7 @@
 
     </div>
     <div class="col-12 col-md-6">
-        <div class="card card-danger">
+        <div class="card card-success">
             <div class="card-header">
                 <h3 class="card-title">Profissionais cadastrados</h3>
 
@@ -108,24 +94,31 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body" style="display: block;">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
-                    </div>
-                    <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
-                    </div>
+            @if (empty($profissionaisPorArea))
+                <div class="alert alert-info m-3">
+                    <i class="fas fa-info-circle"></i>
+                    Nenhum profissional cadastrado para exibir o gráfico.
                 </div>
-                <canvas id="donutChart"
-                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
-                    width="1100" height="500" class="chartjs-render-monitor"></canvas>
-            </div>
+            @else
+                <div class="card-body" style="display: block;">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="donutChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
+                        width="1100" height="500" class="chartjs-render-monitor"></canvas>
+                </div>
+            @endif
         </div>
     </div>
 
     <div class="col-12 col-md-6">
-        <div class="card card-danger">
+        <div class="card card-success">
             <div class="card-header">
                 <h3 class="card-title">Cestas entregues por mes</h3>
 
@@ -135,24 +128,31 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body" style="display: block;">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
-                    </div>
-                    <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
-                    </div>
+            @if(empty($cestasPorMes))
+                <div class="alert alert-info m-3">
+                    <i class="fas fa-info-circle"></i>
+                    Nenhuma cesta entregue neste ano para exibir o gráfico.
                 </div>
-                <canvas id="barChart"
-                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
-                    width="1100" height="500" class="chartjs-render-monitor"></canvas>
-            </div>
+            @else
+                <div class="card-body" style="display: block;">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="barChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
+                        width="1100" height="500" class="chartjs-render-monitor"></canvas>
+                </div>
+            @endif
         </div>
     </div>
 
     <div class="col-12 col-md-6">
-        <div class="card card-danger">
+        <div class="card card-success">
             <div class="card-header">
                 <h3 class="card-title">Atendimentos realizados por mes</h3>
 
@@ -162,19 +162,26 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body" style="display: block;">
-                <div class="chartjs-size-monitor">
-                    <div class="chartjs-size-monitor-expand">
-                        <div class=""></div>
-                    </div>
-                    <div class="chartjs-size-monitor-shrink">
-                        <div class=""></div>
-                    </div>
+            @if (empty($atendimentosPorMes))
+                <div class="alert alert-info m-3">
+                    <i class="fas fa-info-circle"></i>
+                    Nenhum atendimento registrado neste ano para exibir o gráfico.
                 </div>
-                <canvas id="BarChart"
-                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
-                    width="1100" height="500" class="chartjs-render-monitor"></canvas>
-            </div>
+            @else
+                <div class="card-body" style="display: block;">
+                    <div class="chartjs-size-monitor">
+                        <div class="chartjs-size-monitor-expand">
+                            <div class=""></div>
+                        </div>
+                        <div class="chartjs-size-monitor-shrink">
+                            <div class=""></div>
+                        </div>
+                    </div>
+                    <canvas id="BarChart"
+                        style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
+                        width="1100" height="500" class="chartjs-render-monitor"></canvas>
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -211,9 +218,9 @@
             new Chart(ctxProfissionais, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Médicos', 'Enfermeiros', 'Psicólogos', 'Assistentes Sociais'],
+                    labels: ['Médicos', 'Enfermeiros', 'Psicólogos', 'Assistentes Sociais', 'Jurídicos'],
                     datasets: [{
-                        data: [15, 20, 8, 5],
+                        data: profissionaisPorArea,
                         backgroundColor: ['#28a745', '#17a2b8', '#ffc107', '#6f42c1'],
                     }]
                 },
@@ -235,8 +242,8 @@
                     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                     datasets: [{
                         label: 'Cestas Entregues',
-                        data: [30, 25, 40, 35, 50, 45, 60, 55, 70, 65, 80, 75],
-                        backgroundColor: '#dc3545',
+                        data: cestasPorMes,
+                        backgroundColor: '#28a745',
                     }]
                 },
                 options: {
@@ -260,8 +267,8 @@
                     labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
                     datasets: [{
                         label: 'Atendimentos',
-                        data: [50, 60, 55, 70, 65, 80, 75, 90, 85, 100, 95, 110],
-                        backgroundColor: '#28a745',
+                        data: atendimentosPorMes,
+                        backgroundColor: '#ffc107',
                     }]
                 },
                 options: {

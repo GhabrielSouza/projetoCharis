@@ -82,6 +82,9 @@
                                         </td>
                                     </tr>
                                 @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">Nenhum atendimento registrado</td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
