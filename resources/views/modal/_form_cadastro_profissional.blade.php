@@ -15,11 +15,20 @@
                     <label><i class="fas fa-user mr-1"></i>Nome Completo</label>
                     <input type="text" class="form-control" name="nome_completo" required>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
                     <label><i class="fas fa-calendar-alt mr-1"></i>Data de Nascimento</label>
                     <input type="date" class="form-control" name="data_nascimento" required>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
+                    <label><i class="fas fa-venus-mars mr-1"></i>Sexo</label>
+                    <select name="sexo" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
                     <label><i class="fas fa-id-card mr-1"></i>CPF</label>
                     <input type="text" class="form-control cpf-mask" name="cpf" required>
                 </div>

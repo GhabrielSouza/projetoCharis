@@ -317,6 +317,7 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
+        ['header' => 'Central de Cadastros'],
         [
             'text' => 'Beneficiários',
             'url' => '/beneficiarios',
@@ -327,6 +328,7 @@ return [
             'url' => '/profissional',
             'icon' => 'fas fa-user-md',
         ],
+        ['header' => 'Central de Gerenciamento'],
         [
             'text' => 'Gerenciar Atendimento',
             'url' => '/atendimentos',
@@ -337,17 +339,13 @@ return [
             'url' => '/cestas',
             'icon' => 'fas fa-shopping-basket',
         ],
+        ['header' => 'Central de Relatórios'],
         [
             'text' => 'Relatórios',
             'url' => 'admin/pages',
             'icon' => 'fas fa-file-download',
         ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
+        ['header' => 'Central de Configurações'],
         [
             'text' => 'change_password',
             'url' => 'admin/settings',

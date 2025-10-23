@@ -70,6 +70,7 @@ class ProfissionalController extends Controller
         $validated = $request->validate([
             'nome_completo' => 'required|string|max:255',
             'data_nascimento' => 'required|date',
+            'sexo' => 'required|string|max:10',
             'cpf' => 'required|string|max:14|unique:profissionais',
             'telefone' => 'required|string|max:20',
             'email' => 'nullable|email',
@@ -96,6 +97,7 @@ class ProfissionalController extends Controller
             $validated = $request->validate([
                 'nome_completo' => 'required|string|max:255',
                 'data_nascimento' => 'required|date',
+                'sexo' => 'required|string|max:10',
                 'cpf' => 'required|string|max:14|unique:profissionais,cpf,' . $profissional->id,
                 'telefone' => 'required|string|max:20',
                 'email' => 'nullable|email',

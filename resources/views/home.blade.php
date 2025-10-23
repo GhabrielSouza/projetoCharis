@@ -76,7 +76,7 @@
                         <div class=""></div>
                     </div>
                 </div>
-                <canvas id="donutChart"
+                <canvas id="beneficiariosDonutChart"
                     style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
                     width="1100" height="500" class="chartjs-render-monitor"></canvas>
             </div>
@@ -109,7 +109,7 @@
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="donutChart"
+                    <canvas id="profissionaisDonutChart"
                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
                         width="1100" height="500" class="chartjs-render-monitor"></canvas>
                 </div>
@@ -143,7 +143,7 @@
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="barChart"
+                    <canvas id="cestasBarChart"
                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
                         width="1100" height="500" class="chartjs-render-monitor"></canvas>
                 </div>
@@ -177,7 +177,7 @@
                             <div class=""></div>
                         </div>
                     </div>
-                    <canvas id="BarChart"
+                    <canvas id="atendimentosBarChart"
                         style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 550px;"
                         width="1100" height="500" class="chartjs-render-monitor"></canvas>
                 </div>
@@ -191,15 +191,23 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script>
+        // Pass PHP variables to JS
+        var profissionaisPorArea = @json(array_values($profissionaisPorArea));
+        var profissionaisLabels = @json(array_keys($profissionaisPorArea));
+        var cestasPorMes = @json(array_values($cestasPorMes));
+        var atendimentosPorMes = @json(array_values($atendimentosPorMes));
+        var beneficiariosLabels = @json(array_keys($beneficiariosPorSexo));
+        var beneficiariosPorSexo = @json(array_values($beneficiariosPorSexo));
+
         // Beneficiários cadastrados (Donut)
-        var ctxBeneficiarios = document.getElementById('donutChart');
+        var ctxBeneficiarios = document.getElementById('beneficiariosDonutChart');
         if (ctxBeneficiarios) {
             new Chart(ctxBeneficiarios, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Homens', 'Mulheres', 'Outros'],
+                    labels: beneficiariosLabels,
                     datasets: [{
-                        data: [120, 180, 10],
+                        data: beneficiariosPorSexo,
                         backgroundColor: ['#007bff', '#dc3545', '#ffc107'],
                     }]
                 },
@@ -213,15 +221,17 @@
         }
 
         // Profissionais cadastrados (Donut)
-        var ctxProfissionais = document.querySelectorAll('#donutChart')[1];
-        if (ctxProfissionais) {
+        var ctxProfissionais = document.getElementById('profissionaisDonutChart');
+        if (ctxProfissionais && profissionaisPorArea.length > 0) {
             new Chart(ctxProfissionais, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Médicos', 'Enfermeiros', 'Psicólogos', 'Assistentes Sociais', 'Jurídicos'],
+                    labels: profissionaisLabels,
                     datasets: [{
                         data: profissionaisPorArea,
-                        backgroundColor: ['#28a745', '#17a2b8', '#ffc107', '#6f42c1'],
+                        backgroundColor: [
+                            '#28a745', '#17a2b8', '#ffc107', '#6f42c1', '#007bff', '#dc3545', '#fd7e14'
+                        ].slice(0, profissionaisPorArea.length),
                     }]
                 },
                 options: {
@@ -234,8 +244,8 @@
         }
 
         // Cestas entregues por mês (Bar)
-        var ctxCestas = document.getElementById('barChart');
-        if (ctxCestas) {
+        var ctxCestas = document.getElementById('cestasBarChart');
+        if (ctxCestas && cestasPorMes.length > 0) {
             new Chart(ctxCestas, {
                 type: 'bar',
                 data: {
@@ -259,8 +269,8 @@
         }
 
         // Atendimentos realizados por mês (Bar)
-        var ctxAtendimentos = document.getElementById('BarChart');
-        if (ctxAtendimentos) {
+        var ctxAtendimentos = document.getElementById('atendimentosBarChart');
+        if (ctxAtendimentos && atendimentosPorMes.length > 0) {
             new Chart(ctxAtendimentos, {
                 type: 'bar',
                 data: {

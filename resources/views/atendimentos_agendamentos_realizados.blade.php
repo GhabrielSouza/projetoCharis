@@ -82,9 +82,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="7" class="text-center">Nenhum atendimento registrado</td>
-                                    </tr>
+
                                 @endforelse
                             </tbody>
                         </table>
@@ -149,9 +147,7 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">Nenhum atendimento registrado</td>
-                                    </tr>
+
                                 @endforelse
                             </tbody>
                         </table>
@@ -286,7 +282,18 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
                 ]
             });
 
@@ -304,7 +311,18 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
                 ]
             });
 

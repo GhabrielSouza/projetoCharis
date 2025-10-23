@@ -16,6 +16,7 @@ return new class extends Migration {
             // Dados pessoais
             $table->string('nome_completo');
             $table->date('data_nascimento');
+            $table->string('sexo', 10)->nullable();
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 20);
             $table->string('email')->nullable();

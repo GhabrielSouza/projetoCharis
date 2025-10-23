@@ -25,6 +25,7 @@
                                 <p><strong>Nome Completo:</strong><br>{{ $beneficiario->nome }}</p>
                                 <p><strong>Data de
                                         Nascimento:</strong><br>{{ $beneficiario->data_nascimento->format('d/m/Y') }}</p>
+                                <p><strong>Sexo:</strong><br>{{ $beneficiario->sexo }}</p>
                                 <p><strong>Telefone:</strong><br>{{ $beneficiario->telefone ?? 'Não informado' }}</p>
                             </div>
                             <div class="col-md-6">

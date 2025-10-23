@@ -20,14 +20,26 @@
                     <input type="text" id="nome-{{ $profissional->id }}" class="form-control" name="nome_completo"
                         value="{{ old('nome_completo', $profissional->nome_completo) }}" required>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
                     <label for="data_nascimento-{{ $profissional->id }}"><i class="fas fa-calendar-alt mr-1"></i>Data de
                         Nascimento</label>
                     <input id="data_nascimento-{{ $profissional->id }}" type="date"
                         value="{{ old('data_nascimento', $profissional->data_nascimento) }}" class="form-control"
                         name="data_nascimento" required>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-6">
+                    <label for="sexo-{{ $profissional->id }}"><i class="fas fa-venus-mars mr-1"></i>Sexo</label>
+                    <select id="sexo-{{ $profissional->id }}" name="sexo" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        <option value="Masculino" {{ old('sexo', $profissional->sexo) == 'Masculino' ? 'selected' : '' }}>
+                            Masculino</option>
+                        <option value="Feminino" {{ old('sexo', $profissional->sexo) == 'Feminino' ? 'selected' : '' }}>
+                            Feminino</option>
+                        <option value="Outro" {{ old('sexo', $profissional->sexo) == 'Outro' ? 'selected' : '' }}>Outro
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
                     <label for="cpf-{{ $profissional->id }}"><i class="fas fa-id-card mr-1"></i>CPF</label>
                     <input type="text" id="cpf-{{ $profissional->id }}" value="{{ old('cpf', $profissional->cpf) }}"
                         class="form-control cpf-mask" name="cpf" required>

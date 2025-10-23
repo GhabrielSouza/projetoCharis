@@ -1,7 +1,8 @@
 <div class="modal-content">
-    <form id="formCadastroCesta-{{ $beneficiario->id }}" action="{{ route('cesta.store') }}" method="post"
+    <form id="formCadastroCesta-{{ $beneficiario->id }}" action="{{ route('cesta.update', $cesta->id) }}" method="post"
         class="needs-validation" name="formCadastroCesta" novalidate>
         @csrf
+        @method('PUT')
         <input type="hidden" name="beneficiario_id" value="{{ $beneficiario->id }}">
 
         <div class="modal-header bg-gradient-orange text-white">
@@ -29,7 +30,7 @@
                             </div>
                             <input type="date" id="data_entrega" name="data_entrega"
                                 class="form-control @error('data_entrega') is-invalid @enderror"
-                                value="{{ old('data_entrega') }}" required>
+                                value="{{ old('data_entrega', $cesta->data_entrega) }}" required>
                         </div>
                         @error('data_entrega')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -48,10 +49,10 @@
                                 <span class="input-group-text"><i class="fas fa-box"></i></span>
                             </div>
                             <input type="number" id="quantidade_cestas" name="quantidade"
-                                class="form-control @error('quantidade_cestas') is-invalid @enderror"
-                                value="{{ old('quantidade_cestas') }}" required min="1">
+                                class="form-control @error('quantidade') is-invalid @enderror"
+                                value="{{ old('quantidade', $cesta->quantidade) }}" required min="1">
                         </div>
-                        @error('quantidade_cestas')
+                        @error('quantidade')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -66,7 +67,7 @@
 
                         <textarea id="observacoes-{{ $beneficiario->id }}" name="observacoes"
                             class="form-control @error('observacoes') is-invalid @enderror" rows="3"
-                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('observacoes') }}</textarea>
+                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('observacoes', $cesta->observacoes) }}</textarea>
                         @error('observacoes')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

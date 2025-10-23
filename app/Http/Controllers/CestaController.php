@@ -34,7 +34,7 @@ class CestaController extends Controller
 
         try {
             CestaBasicaEntregue::create($validate);
-            return redirect()->route('beneficiarios.index')
+            return redirect()->route('cestas.index')
                 ->with('success', 'Cesta Básica cadastrada com sucesso!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erro ao cadastrar cesta básica: ' . $e->getMessage());

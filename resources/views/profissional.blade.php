@@ -296,7 +296,18 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
                 ]
             });
 

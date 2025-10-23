@@ -62,6 +62,7 @@ class BeneficiarioController extends Controller
         $validated = $request->validate([
             'nome' => 'required|string|max:100',
             'cpf' => 'required|string|max:14|unique:beneficiarios',
+            'sexo' => 'required|string|max:10',
             'data_nascimento' => 'required|date',
             'telefone' => 'nullable|string|max:20',
             'escolaridade' => 'nullable|string',
@@ -97,6 +98,7 @@ class BeneficiarioController extends Controller
 
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
+            'sexo' => 'required|string|max:10',
             'cpf' => 'required|string|max:14|unique:beneficiarios,cpf,' . $beneficiario->id,
             'data_nascimento' => 'required|date',
             'telefone' => 'nullable|string|max:20',

@@ -13,6 +13,7 @@ class Beneficiario extends Model
     protected $fillable = [
         'nome',
         'data_nascimento',
+        'sexo',
         'cpf',
         'telefone',
         'endereco_logradouro',

@@ -47,8 +47,8 @@ class AtendimentoController extends Controller
         foreach ($periodo as $hora) {
             $horariosDisponiveis[] = $hora->format('H:i');
         }
-        $beneficiarios = Beneficiario::all();
-        $profissionais = Profissional::all();
+        $beneficiarios = Beneficiario::where('status', 'ativo')->get();
+        $profissionais = Profissional::where('status', 'ativo')->get();
         $areas = AreaAtucao::all();
 
         return view('atendimentos_agendamentos_realizados', compact(

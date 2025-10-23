@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->date('data_nascimento');
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 20)->nullable();
+            $table->string('sexo', 10)->nullable();
 
             // Relacionamento com endereço
             $table->string('endereco_logradouro', 255);

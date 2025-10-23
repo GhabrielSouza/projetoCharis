@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <p><strong>Nome Completo:</strong><br>{{ $profissional->nome_completo }}</p>
-
+                                <p><strong>Sexo:</strong><br>{{ $profissional->sexo ?? 'Não informado' }}</p>
                                 <p><strong>Telefone:</strong><br>{{ $profissional->telefone ?? 'Não informado' }}</p>
                                 <p><strong>Data de Nascimento:</strong><br>
                                     {{ \Carbon\Carbon::parse($profissional->data_nascimento)->format('d/m/Y') }}</p>

@@ -44,6 +44,26 @@
                     @enderror
                 </div>
 
+                {{-- Sexo --}}
+                <div class="form-group">
+                    <label for="sexo">Sexo</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                        </div>
+                        <select id="sexo" name="sexo"
+                            class="form-control @error('sexo') is-invalid @enderror" required>
+                            <option value="">Selecione...</option>
+                            <option value="Masculino" {{ old('sexo') == 'Masculino' ? 'selected' : '' }}>Masculino</option>
+                            <option value="Feminino" {{ old('sexo') == 'Feminino' ? 'selected' : '' }}>Feminino</option>
+                            <option value="Outro" {{ old('sexo') == 'Outro' ? 'selected' : '' }}>Outro</option>
+                        </select>
+                    </div>
+                    @error('sexo')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 {{-- CPF --}}
                 <div class="form-group">
                     <label for="cpf">CPF</label>

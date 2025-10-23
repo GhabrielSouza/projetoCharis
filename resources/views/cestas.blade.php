@@ -46,19 +46,18 @@
                     <div class="card-tools">
                         <button data-toggle="modal" data-target="#addAtendimentoModal" disabled
                             class="btn btn-sm btn-primary">
-                            <i class="fas fa-plus mr-1"></i> Nova Entrega
+                            <i class="fas fa-plus mr-1"></i> Nova Cesta
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover" id="atendimentosTable">
+                        <table class="table table-bordered table-hover" id="cestasTable">
                             <thead class="thead-light">
                                 <tr>
                                     <th>Beneficiário</th>
                                     <th>Data de Entrega</th>
                                     <th>Quantidade</th>
-
                                     <th>Observações</th>
                                     <th>Ações</th>
                                 </tr>
@@ -69,12 +68,12 @@
                                         <td>{{ $cesta->beneficiario->nome }}</td>
                                         <td>{{ \Carbon\Carbon::parse($cesta->data_entrega)->format('d/m/Y') }}</td>
                                         <td>{{ $cesta->quantidade }}</td>
-                                        <td>{{ $cesta->observacoes }}</td>
+                                        <td>{{ $cesta->observacoes ? $cesta->observacoes : 'Sem observações' }}</td>
                                         <td>
                                             <div class="btn-group">
 
                                                 <button type="button" class="btn btn-sm btn-warning" title="Editar"
-                                                    data-toggle="modal" data-target="#addCestaModal-{{ $cesta->id }}">
+                                                    data-toggle="modal" data-target="#editCestaModal-{{ $cesta->id }}">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
                                                 <form action="{{ route('cesta.destroy', $cesta->id) }}" method="POST"
@@ -90,9 +89,6 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center">Nenhum registro encontrado</td>
-                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -103,8 +99,8 @@
     </div>
 
     @foreach($cestas as $cesta)
-        <div class="modal fade" id="addCestaModal-{{ $cesta->id }}" tabindex="-1" role="dialog"
-            aria-labelledby="addCestaLabel" aria-hidden="true">
+        <div class="modal fade" id="editCestaModal-{{ $cesta->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="editCestaModalLabel-{{ $cesta->id }}" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 @include('modal._form_edicao_cesta_basica', ['cesta' => $cesta, 'beneficiario' => $cesta->beneficiario])
             </div>
@@ -154,8 +150,9 @@
 
     <script>
         $(document).ready(function () {
-            // Tabela de Atendimentos Realizados
-            $('#atendimentosTable').DataTable({
+
+            // Tabela de Cestas entregues
+            $('#cestasTable').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
                 },
@@ -168,25 +165,18 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf'
-                ]
-            });
-
-            // Tabela de Agendamentos Pendentes
-            $('#agendamentosTable').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
-                },
-                "order": [[0, "asc"], [1, "asc"]],
-                "pageLength": 10,
-                "lengthChange": false,
-                "searching": true,
-                "columnDefs": [
-                    { "orderable": false, "targets": 6 }
-                ],
-                dom: 'Bfrtip',
-                buttons: [
-                    'excel', 'pdf'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
                 ]
             });
 

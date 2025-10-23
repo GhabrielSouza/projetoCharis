@@ -7,12 +7,12 @@
 @stop
 
 @section('content')
-    <div class="card">
-        <div class="card-header bg-orange text-white">
+    <div class="card card-orange card-outline">
+        <div class="card-header ">
             <h3 class="card-title"><i class="fas fa-users mr-2"></i>Cadastro de Beneficiários</h3>
             <div class="card-tools">
                 <div class="btn-group">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
+                    <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
                         title="Adicionar beneficiário">
                         <i class="fas fa-user-plus mr-1"></i> Novo Beneficiario
                     </button>
@@ -124,18 +124,7 @@
                 </table>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="dataTables_info" role="status" aria-live="polite">
-                        Mostrando <strong>{{ $beneficiarios->firstItem() }}</strong> a
-                        <strong>{{ $beneficiarios->lastItem() }}</strong> de <strong>{{ $beneficiarios->total() }}</strong>
-                        resultados
-                    </div>
-                </div>
-                <div class="col-md-6 d-flex justify-content-end">
-                    {{ $beneficiarios->links() }}
-                </div>
-            </div>
+
         </div>
         <div class="card-footer text-muted small">
             <div class="row">
@@ -286,7 +275,18 @@
                 ],
                 dom: 'Bfrtip',
                 buttons: [
-                    'excel', 'pdf'
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
                 ]
             });
 
