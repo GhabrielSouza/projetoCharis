@@ -13,7 +13,9 @@ class CestaController extends Controller
     public function index()
     {
         $cestas = CestaBasicaEntregue::with('beneficiario')->get();
-        return view('cestas', compact('cestas'));
+        $cestasEntregues = $cestas->count();
+
+        return view('cestas', compact('cestas', 'cestasEntregues'));
     }
 
     /**
