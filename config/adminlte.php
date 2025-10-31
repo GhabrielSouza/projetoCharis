@@ -306,6 +306,21 @@ return [
             'text' => 'search',
             'topnav_right' => true,
         ],
+        [
+            'type' => 'navbar-notification',
+            'id' => 'my-notification',
+            'icon' => 'fas fa-bell',
+            'label' => 0,
+            'label_color' => 'danger',
+            'url' => '',
+            'dropdown_mode' => true,
+            'dropdown_flabel' => '',
+            'topnav_right' => true,
+            'update_cfg' => [
+                'url' => 'notificacoes/json',
+                'period' => 60,
+            ],
+        ],
 
         // Sidebar items:
         [
@@ -342,7 +357,7 @@ return [
         ['header' => 'Central de Relatórios'],
         [
             'text' => 'Relatórios',
-            'url' => 'admin/pages',
+            'url' => '/relatorios',
             'icon' => 'fas fa-file-download',
         ],
         ['header' => 'Central de Configurações'],

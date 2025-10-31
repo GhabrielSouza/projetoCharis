@@ -51,17 +51,24 @@ class HomeController extends Controller
             ->toArray();
 
 
-        //quantidade por mes para os charts
-        $cestasPorMes = CestaBasicaEntregue::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        //quantidade por mes para os charts (preencher todos os meses)
+        $cestasRaw = CestaBasicaEntregue::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->groupBy('month')
             ->pluck('count', 'month')
             ->toArray();
 
-        $atendimentosPorMes = AtendimentoRealizado::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        $atendimentosRaw = AtendimentoRealizado::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->groupBy('month')
             ->pluck('count', 'month')
             ->toArray();
 
+
+        $cestasPorMes = [];
+        $atendimentosPorMes = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $cestasPorMes[$i] = isset($cestasRaw[$i]) ? $cestasRaw[$i] : 0;
+            $atendimentosPorMes[$i] = isset($atendimentosRaw[$i]) ? $atendimentosRaw[$i] : 0;
+        }
 
         return view('home', compact('beneficiariosCount', 'profissionaisCount', 'cestasCount', 'atendimentosCount', 'beneficiariosPorSexo', 'cestasPorMes', 'atendimentosPorMes', 'profissionaisPorArea'));
     }

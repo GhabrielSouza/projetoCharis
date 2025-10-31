@@ -32,7 +32,7 @@ class Profissional extends Model
     // Relacionamento: Um Profissional pertence a uma AreaAtuacao
     public function areaAtuacao()
     {
-        return $this->belongsTo(AreaAtucao::class);
+        return $this->belongsTo(AreaAtucao::class, 'area_atuacao_id', 'id');
     }
 
     // Relacionamento: Um Profissional tem muitos Agendamentos

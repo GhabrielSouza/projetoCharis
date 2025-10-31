@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Agendamento;
 use App\Models\AtendimentoRealizado;
+use Barryvdh\DomPDF\Facade\PDF;
 
 class AgendamentoController extends Controller
 {
@@ -52,8 +53,8 @@ class AgendamentoController extends Controller
         $agendamento->data_hora_agendamento = $request->input('data_hora_agendamento');
         $agendamento->observacoes_agendamento = $request->input('observacoes_agendamento');
         $agendamento->hora_registro = $request->input('hora_registro');
-        $agendamento->status_agendamento = 'pendente'; // Definindo o status padrão como 'pendente'
-        $agendamento->agendamento = 'Agendado'; // Definindo o status padrão como 'Agendado'
+        $agendamento->status_agendamento = 'pendente';
+        $agendamento->agendamento = 'Agendado';
         $agendamento->save();
 
         return redirect()->route('atendimentos.index')->with('success', 'Agendamento criado com sucesso.');
@@ -116,6 +117,17 @@ class AgendamentoController extends Controller
         $agendamento->save();
 
         return redirect()->route('atendimentos.index')->with('success', 'Agendamento cancelado com sucesso.');
+    }
+
+    public function gerarProntuario($id)
+    {
+        set_time_limit(300); // Aumenta o tempo máximo de execução para 5 minutos
+
+        $agendamento = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento')->findOrFail($id);
+
+        $pdf = PDF::loadView('pdf.prontuario.prontuario', compact('agendamento'));
+
+        return $pdf->stream('prontuario-' . $agendamento->beneficiario->nome . '.pdf');
     }
 
     /**

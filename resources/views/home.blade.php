@@ -195,9 +195,17 @@
         var profissionaisPorArea = @json(array_values($profissionaisPorArea));
         var profissionaisLabels = @json(array_keys($profissionaisPorArea));
         var cestasPorMes = @json(array_values($cestasPorMes));
+        var mesesCestas = @json(array_keys($cestasPorMes));
         var atendimentosPorMes = @json(array_values($atendimentosPorMes));
+        var atendimentosMeses = @json(array_keys($atendimentosPorMes));
         var beneficiariosLabels = @json(array_keys($beneficiariosPorSexo));
         var beneficiariosPorSexo = @json(array_values($beneficiariosPorSexo));
+
+        var meses = {
+            1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr',
+            5: 'Mai', 6: 'Jun', 7: 'Jul', 8: 'Ago',
+            9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez'
+        };
 
         // Beneficiários cadastrados (Donut)
         var ctxBeneficiarios = document.getElementById('beneficiariosDonutChart');
@@ -249,7 +257,7 @@
             new Chart(ctxCestas, {
                 type: 'bar',
                 data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    labels: mesesCestas.map(function (mes) { return meses[mes]; }),
                     datasets: [{
                         label: 'Cestas Entregues',
                         data: cestasPorMes,
@@ -274,7 +282,7 @@
             new Chart(ctxAtendimentos, {
                 type: 'bar',
                 data: {
-                    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    labels: atendimentosMeses.map(function (mes) { return meses[mes]; }),
                     datasets: [{
                         label: 'Atendimentos',
                         data: atendimentosPorMes,

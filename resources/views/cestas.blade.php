@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Atendimentos e Agendamentos')
+@section('title', 'Cestas Básicas Entregues')
 
 @section('content_header')
-<h1>Gestão de Atendimentos e Agendamentos</h1>
+<h1>Gestão de Cestas Básicas Entregues</h1>
 @stop
 
 @section('content')

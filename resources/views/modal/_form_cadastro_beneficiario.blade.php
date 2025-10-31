@@ -28,6 +28,21 @@
                     @enderror
                 </div>
 
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <input type="email" id="email" name="email"
+                            class="form-control @error('email') is-invalid @enderror" placeholder="E-mail"
+                            value="{{ old('email') }}" required>
+                    </div>
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 {{-- Data de nascimento --}}
                 <div class="form-group">
                     <label for="data_nascimento">Data de Nascimento</label>
@@ -119,6 +134,22 @@
                         </select>
                     </div>
                     @error('escolaridade')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                {{-- Ocupação --}}
+                <div class="form-group">
+                    <label for="ocupacao">Ocupação</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                        </div>
+                        <input type="text" id="ocupacao" name="ocupacao"
+                            class="form-control @error('ocupacao') is-invalid @enderror"
+                            placeholder="Ocupação" value="{{ old('ocupacao') }}">
+                    </div>
+                    @error('ocupacao')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

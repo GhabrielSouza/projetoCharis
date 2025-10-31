@@ -74,10 +74,12 @@
                                                 </form>
 
                                                 <!-- botao para gerar prontuario em pdf -->
-                                                <button class="btn btn-sm btn-info" title="Gerar Prontuário"
-                                                    onclick="gerarProntuario({{ $agendamento->id }})">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </button>
+                                                <form action="{{ route('agendamento.prontuario', $agendamento->id) }}"
+                                                    method="GET" class="d-inline">
+                                                    <button class="btn btn-sm btn-info" title="Gerar Prontuário" onclick="">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -127,23 +129,29 @@
                                         <td>{{ $atendimento->beneficiario->nome }}</td>
                                         <td>{{ Str::limit($atendimento->descricao_atendimento, 50) }}</td>
                                         <td>
-                                            <div class="btn-group">
 
-                                                <button type="button" class="btn btn-sm btn-warning" title="Editar"
-                                                    data-toggle="modal"
-                                                    data-target="#addAtendimentoModal-{{ $atendimento->id }}">
-                                                    <i class="fas fa-edit"></i>
+                                            <button type="button" class="btn btn-sm btn-warning" title="Editar"
+                                                data-toggle="modal"
+                                                data-target="#addAtendimentoModal-{{ $atendimento->id }}">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <form action="{{ route('atendimentos.destroy', $atendimento->id) }}"
+                                                method="POST" class="d-inline px-1" name="formDeleteAtendimento">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Excluir">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
-                                                <form action="{{ route('atendimentos.destroy', $atendimento->id) }}"
-                                                    method="POST" class="d-inline" name="formDeleteAtendimento">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger" title="Excluir">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
+                                            </form>
 
-                                            </div>
+                                            <form action="{{ route('agendamento.prontuario', $agendamento->id) }}"
+                                                method="GET" class="d-inline">
+                                                <button class="btn btn-sm btn-info" title="Gerar Prontuário" onclick="">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </button>
+                                            </form>
+
                                         </td>
                                     </tr>
                                 @empty

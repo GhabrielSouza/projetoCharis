@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('cpf', 14)->unique();
             $table->string('telefone', 20)->nullable();
             $table->string('sexo', 10)->nullable();
+            $table->string('email')->nullable();
 
             // Relacionamento com endereço
             $table->string('endereco_logradouro', 255);
@@ -27,6 +28,7 @@ return new class extends Migration {
 
             // Escolaridade e cadastro
             $table->string('escolaridade')->nullable();
+            $table->string('ocupacao')->nullable();
             $table->string('cadunico')->nullable()->comment('Número do CadÚnico');
 
             // Limitações

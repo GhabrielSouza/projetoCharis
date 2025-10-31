@@ -18,7 +18,7 @@ class AreaAtucao extends Model
     // Relacionamento: Uma AreaAtuacao tem muitos Profissionais
     public function profissionais()
     {
-        return $this->hasMany(Profissional::class);
+        return $this->hasMany(Profissional::class, 'area_atuacao_id', 'id');
     }
 
     // Relacionamento: Uma AreaAtuacao tem muitos Agendamentos
