@@ -14,7 +14,7 @@ class AgendamentoController extends Controller
      */
     public function index()
     {
-        $agendamentosPendentes = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento', 'atendimentoRealizado')
+        $agendamentosPendentes = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento', 'atendimentoRealizado', 'tipoDeAtendimento')
             ->whereDoesntHave('atendimentoRealizado')
             ->where('status_agendamento', 'pendente')
             ->orderBy('data_hora_agendamento', 'asc')
@@ -40,6 +40,7 @@ class AgendamentoController extends Controller
         $request->validate([
             'beneficiario_id' => 'required|exists:beneficiarios,id',
             'profissional_id' => 'required|exists:profissionais,id',
+            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
             'area_atendimento_id' => 'required|exists:areas_atuacao,id',
             'hora_registro' => 'required|string|max:5',
             'data_hora_agendamento' => 'required|date|after:now',
@@ -49,6 +50,7 @@ class AgendamentoController extends Controller
         $agendamento = new Agendamento();
         $agendamento->beneficiario_id = $request->input('beneficiario_id');
         $agendamento->profissional_id = $request->input('profissional_id');
+        $agendamento->tipo_de_atendimento_id = $request->input('tipo_de_atendimento_id');
         $agendamento->area_atendimento_id = $request->input('area_atendimento_id');
         $agendamento->data_hora_agendamento = $request->input('data_hora_agendamento');
         $agendamento->observacoes_agendamento = $request->input('observacoes_agendamento');
@@ -77,6 +79,7 @@ class AgendamentoController extends Controller
         $request->validate([
             'beneficiario_id' => 'required|exists:beneficiarios,id',
             'profissional_id' => 'required|exists:profissionais,id',
+            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
             'area_atendimento_id' => 'required|exists:areas_atendimento,id',
             'data_hora_agendamento' => 'required|date|after:now',
             'hora_registro' => 'required|string|max:5',
@@ -127,7 +130,7 @@ class AgendamentoController extends Controller
 
         $pdf = PDF::loadView('pdf.prontuario.prontuario', compact('agendamento'));
 
-        return $pdf->stream('prontuario-' . $agendamento->beneficiario->nome . '.pdf');
+        return $pdf->download('prontuario-' . $agendamento->beneficiario->nome . '.pdf');
     }
 
     /**

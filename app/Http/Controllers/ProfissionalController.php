@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Profissional;
 use App\Models\AreaAtucao;
 use Carbon\CarbonPeriod;
+use App\Models\TipoDeAtendimento;
 
 class ProfissionalController extends Controller
 {
@@ -54,6 +55,7 @@ class ProfissionalController extends Controller
         $profissionais->appends(['search' => $search]);
 
         $areas = AreaAtucao::orderBy('nome_area')->get();
+        $tiposDeAtendimento = TipoDeAtendimento::orderBy('nome')->get();
         $beneficiarios = Beneficiario::orderBy('nome')->get();
 
         $totalAtivos = $profissionais->where('status', 'ativo')->count();
@@ -61,7 +63,7 @@ class ProfissionalController extends Controller
 
         $ultimaAtualizacao = $profissionais->isNotEmpty() ? $profissionais->max('updated_at') : now();
 
-        return view('profissional', compact('profissionais', 'totalAtivos', 'totalInativos', 'ultimaAtualizacao', 'areas', 'beneficiarios', 'horariosDisponiveis'));
+        return view('profissional', compact('profissionais', 'totalAtivos', 'totalInativos', 'ultimaAtualizacao', 'areas', 'beneficiarios', 'horariosDisponiveis', 'tiposDeAtendimento'));
     }
 
 

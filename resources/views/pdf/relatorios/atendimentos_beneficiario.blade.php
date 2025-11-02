@@ -117,7 +117,7 @@
                 @forelse ($atendimentos as $atendimento)
                     <tr>
                         <td>{{ \Carbon\Carbon::parse($atendimento->data_hora_atendimento)->format('d/m/Y') }}</td>
-                        <td>{{ $atendimento->areaAtendimento->nome_area }}</td>
+                        <td>{{ $atendimento->TipoDeAtendimento->nome }}</td>
                         <td>{{ $atendimento->profissional->nome_completo }}</td>
                         <td>{{ $atendimento->observacoes }}</td>
                     </tr>

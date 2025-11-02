@@ -18,7 +18,13 @@ class AreaAtuacaoSeeder extends Seeder
             ['nome_area' => 'Jurídica'],
             ['nome_area' => 'Psicologia'],
             ['nome_area' => 'Assistência Social'],
-            // Adicione outras áreas conforme necessário para o Projeto Charis
+            ['nome_area' => 'Educação'],
+            ['nome_area' => 'Enfermagem'],
+            ['nome_area' => 'Fisioterapia'],
+            ['nome_area' => 'Nutrição'],
+            ['nome_area' => 'Terapia Ocupacional'],
+            ['nome_area' => 'Odontologia'],
+            ['nome_area' => 'Oftalmologia'],
         ];
 
         DB::table('areas_atuacao')->insert($areas);

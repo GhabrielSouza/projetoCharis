@@ -37,7 +37,7 @@ class RelatorioController extends Controller
             ->get();
 
         $pdf = PDF::loadView('pdf.relatorios.atendimentos_periodo', compact('atendimentos', 'validated'));
-        return $pdf->stream('atendimentos_periodo.pdf');
+        return $pdf->download('atendimentos_periodo.pdf');
     }
 
     public function atendimentosPorBeneficiario(Request $request)
@@ -55,7 +55,7 @@ class RelatorioController extends Controller
             ->get();
 
         $pdf = PDF::loadView('pdf.relatorios.atendimentos_beneficiario', compact('atendimentos', 'beneficiario'));
-        return $pdf->stream('atendimentos_beneficiario.pdf');
+        return $pdf->download('atendimentos_beneficiario.pdf');
     }
 
     public function cestas(Request $request)
@@ -84,7 +84,7 @@ class RelatorioController extends Controller
         }
 
         $pdf = PDF::loadView('pdf.relatorios.cestas', compact('cestas', 'validated'));
-        return $pdf->stream('cestas.pdf');
+        return $pdf->download('cestas.pdf');
     }
 
     public function anual(Request $request)
@@ -174,7 +174,7 @@ class RelatorioController extends Controller
             'totalAnoCestas'
         ))->setPaper('a4', 'landscape');
 
-        return $pdf->stream("relatorio_anual_{$ano}.pdf");
+        return $pdf->download("relatorio_anual_{$ano}.pdf");
     }
 
 

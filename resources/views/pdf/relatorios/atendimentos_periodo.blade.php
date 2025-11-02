@@ -113,6 +113,7 @@
                     <th style="width: 25%;">Beneficiário</th>
                     <th style="width: 25%;">Profissional</th>
                     <th style="width: 20%;">Área</th>
+                    <th style="width: 15%;">Tipo</th>
                     <th style="width: 15%;">Observações</th>
                 </tr>
             </thead>
@@ -123,6 +124,7 @@
                         <td>{{ $at->beneficiario->nome }}</td>
                         <td>{{ $at->profissional->nome_completo ?? '—' }}</td>
                         <td>{{ $at->areaAtendimento->nome_area ?? '—' }}</td>
+                        <td>{{ $at->TipoDeAtendimento->nome ?? '—' }}</td>
                         <td>{{ $at->observacoes ?? '—' }}</td>
                     </tr>
                 @empty

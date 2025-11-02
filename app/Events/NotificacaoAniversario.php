@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Profissional;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,7 +19,7 @@ class NotificacaoAniversario
     /**
      * Create a new event instance.
      */
-    public function __construct(public Notificacao $notificacao)
+    public function __construct(public Profissional $profissional)
     {
 
     }

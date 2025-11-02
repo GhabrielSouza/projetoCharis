@@ -10,6 +10,7 @@ use App\Models\Beneficiario;
 use App\Models\Profissional;
 use App\Models\AreaAtucao;
 use Carbon\CarbonPeriod;
+use App\Models\TipoDeAtendimento;
 
 
 class AtendimentoController extends Controller
@@ -21,11 +22,11 @@ class AtendimentoController extends Controller
 
     public function index()
     {
-        $atendimentos = AtendimentoRealizado::with('beneficiario', 'profissional', 'areaAtendimento', 'agendamentoOrigem')
+        $atendimentos = AtendimentoRealizado::with('beneficiario', 'profissional', 'areaAtendimento', 'agendamentoOrigem', 'tipoDeAtendimento')
             ->orderBy('created_at', 'desc')
             ->paginate(5);
 
-        $agendamentosPendentes = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento', 'atendimentoRealizado')
+        $agendamentosPendentes = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento', 'atendimentoRealizado', 'tipoDeAtendimento')
             ->whereDoesntHave('atendimentoRealizado')
             ->where('status_agendamento', 'pendente')
             ->orderBy('data_hora_agendamento', 'asc')
@@ -50,6 +51,7 @@ class AtendimentoController extends Controller
         $beneficiarios = Beneficiario::where('status', 'ativo')->get();
         $profissionais = Profissional::where('status', 'ativo')->get();
         $areas = AreaAtucao::all();
+        $tiposDeAtendimento = TipoDeAtendimento::all();
 
         return view('atendimentos_agendamentos_realizados', compact(
             'atendimentos',
@@ -61,7 +63,8 @@ class AtendimentoController extends Controller
             'beneficiarios',
             'profissionais',
             'areas',
-            'horariosDisponiveis'
+            'horariosDisponiveis',
+            'tiposDeAtendimento'
         ));
     }
 
@@ -70,6 +73,7 @@ class AtendimentoController extends Controller
         $request->validate([
             'beneficiario_id' => 'required|exists:beneficiarios,id',
             'profissional_id' => 'required|exists:profissionais,id',
+            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
             'area_atendimento_id' => 'required|exists:areas_atuacao,id',
             'data_hora_atendimento' => 'required|date|before_or_equal:now',
             'hora_registro' => 'required|string|max:5',
@@ -103,6 +107,7 @@ class AtendimentoController extends Controller
             'hora_registro' => 'required|string|max:5',
             'descricao_atendimento' => 'required|string|max:2000',
             'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id,' . $atendimento->id,
+            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
         ]);
 
         $atendimento->update($request->all());

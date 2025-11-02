@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('beneficiario_id')->constrained('beneficiarios')->onDelete('restrict');
             $table->foreignId('profissional_id')->constrained('profissionais')->onDelete('restrict');
+            $table->foreignId('tipo_de_atendimento_id')->constrained('tipo_de_atendimento')->onDelete('restrict');
             $table->foreignId('area_atendimento_id')->constrained('areas_atuacao')->onDelete('restrict');
             $table->dateTime('data_hora_agendamento');
             $table->string('hora_registro');

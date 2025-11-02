@@ -48,4 +48,9 @@ class AtendimentoRealizado extends Model
     {
         return $this->belongsTo(Agendamento::class, 'agendamento_origem_id');
     }
+
+    public function tipoDeAtendimento()
+    {
+        return $this->belongsTo(TipoDeAtendimento::class, 'tipo_de_atendimento_id');
+    }
 }

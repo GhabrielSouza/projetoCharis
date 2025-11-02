@@ -86,14 +86,15 @@
 
             <div class="form-group">
                 <label for="tipo_atendimento-{{ $profissional->id }}"><i class="fas fa-stethoscope mr-1"></i> Tipo de Atendimento</label>
-                <select id="tipo_atendimento-{{ $profissional->id }}" name="tipo_atendimento" class="form-control @error('tipo_atendimento') is-invalid @enderror" required>
+                <select id="tipo_atendimento-{{ $profissional->id }}" name="tipo_de_atendimento_id" class="form-control @error('tipo_de_atendimento_id') is-invalid @enderror" required>
                     <option value="">Selecione o tipo</option>
-                    <option value="consulta" {{ old('tipo_atendimento') == 'consulta' ? 'selected' : '' }}>Consulta</option>
-                    <option value="exame" {{ old('tipo_atendimento') == 'exame' ? 'selected' : '' }}>Exame</option>
-                    <option value="retorno" {{ old('tipo_atendimento') == 'retorno' ? 'selected' : '' }}>Retorno</option>
-                    <option value="procedimento" {{ old('tipo_atendimento') == 'procedimento' ? 'selected' : '' }}>Procedimento</option>
+                    @foreach($tiposDeAtendimento as $tipo)
+                        <option value="{{ $tipo->id }}" {{ old('tipo_de_atendimento_id') == $tipo->id ? 'selected' : '' }}>
+                            {{ $tipo->nome }}
+                        </option>
+                    @endforeach
                 </select>
-                @error('tipo_atendimento')
+                @error('tipo_de_atendimento_id')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>

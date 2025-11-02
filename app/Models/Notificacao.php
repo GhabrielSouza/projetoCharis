@@ -12,7 +12,7 @@ class Notificacao extends Model
         'tipo',
         'titulo',
         'dados',
-        'id_pessoas_destinatario',
+        'user_id',
         'data_leitura',
     ];
 

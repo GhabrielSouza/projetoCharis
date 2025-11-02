@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('tipo');
             $table->string('titulo');
-            $table->json('dados');
+            $table->json('dados')->nullable();
             $table->foreignId('user_id')->constrained('users', 'id')->cascadeOnDelete();
             $table->timestamp('data_leitura')->nullable();
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Notificacao;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class NotificacaoController extends Controller
 {
@@ -11,35 +12,50 @@ class NotificacaoController extends Controller
         $notificacoes = Notificacao::where('user_id', auth()->id())
             ->with('destinatario')
             ->latest()
-            ->get();
+            ->paginate(10);
 
-        return view('notificacoes.index', compact('notificacoes'));
+        return view('notificacoes', compact('notificacoes'));
     }
 
     public function json()
     {
-        $notificacoes = Notificacao::where('user_id', auth()->id())
+        $userId = auth()->id() ?? 1;
+
+        $notificacoes = Notificacao::where('user_id', $userId)
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get();
 
-        return response()->json([
+        $dropdownHtml = '';
+
+        foreach ($notificacoes as $key => $n) {
+            $text = Str::limit($n->titulo, 15);
+            $icon = "<i class='fas fa-birthday-cake text-warning'></i>";
+
+            $time = "<span class='float-right text-muted text-sm'>"
+                . $n->created_at->diffForHumans()
+                . "</span>";
+
+            $dropdownHtml .= "<a href='" . route('notificacoes.show', $n->id) . "'
+                           class='dropdown-item'>
+                            {$icon}{$text}{$time}
+                          </a>";
+
+            if ($key < count($notificacoes) - 1) {
+                $dropdownHtml .= "<div class='dropdown-divider'></div>";
+            }
+        }
+
+        // Retorna o formato esperado
+        return [
             'label' => $notificacoes->whereNull('data_leitura')->count(),
             'label_color' => 'danger',
-            'icon_color' => 'warning',
-            'update_mode' => 'replace',
-            'items' => $notificacoes->map(function ($n) {
-                return [
-                    'id' => $n->id,
-                    'text' => $n->titulo,
-                    'time' => $n->created_at->diffForHumans(),
-                    'class' => is_null($n->data_leitura) ? 'bg-light' : '',
-                    'icon' => 'fas fa-bell',
-                    'url' => route('notificacoes.show', $n->id),
-                ];
-            }),
-        ]);
+            'icon_color' => 'dark',
+            'dropdown' => $dropdownHtml,
+        ];
     }
+
+
 
 
     public function show($id)
@@ -54,5 +70,14 @@ class NotificacaoController extends Controller
         $notificacao->update(['data_leitura' => now()]);
 
         return redirect()->back()->with('success', 'Notificação marcada como lida.');
+    }
+
+    public function marcarTodasComoLida()
+    {
+        Notificacao::where('user_id', auth()->id())
+            ->whereNull('data_leitura')
+            ->update(['data_leitura' => now()]);
+
+        return back();
     }
 }

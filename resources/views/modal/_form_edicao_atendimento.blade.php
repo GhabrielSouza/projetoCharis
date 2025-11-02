@@ -88,18 +88,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="observacoes_atendimento"><i class="fas fa-comment-medical mr-1"></i>
-                            Observações</label>
-                        <textarea id="observacoes_atendimento" name="observacoes_agendamento"
-                            class="form-control @error('observacoes_agendamento') is-invalid @enderror" rows="3"
-                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('observacoes_agendamento', $atendimento->observacoes_agendamento) }}</textarea>
-                        @error('observacoes_agendamento')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
                         <label for="area_atendimento_id"><i class="fas fa-procedures mr-1"></i> Área de
                             Atendimento</label>
                         <select id="area_atendimento_id" name="area_atendimento_id"
@@ -112,6 +100,38 @@
                             @endforeach
                         </select>
                         @error('area_atendimento_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="tipo_atendimento_id"><i class="fas fa-stethoscope mr-1"></i>
+                            Tipo de Atendimento</label>
+                        <select id="tipo_atendimento_id" name="tipo_atendimento"
+                            class="form-control @error('tipo_atendimento') is-invalid @enderror" required>
+                            <option value="">Selecione o tipo</option>
+                            @foreach($tiposDeAtendimento as $tipo)
+                                <option value="{{ $tipo->id }}" {{ old('tipo_atendimento') == $tipo->id ? 'selected' : '' }}>
+                                    {{ $tipo->nome }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('tipo_atendimento')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="observacoes_atendimento"><i class="fas fa-comment-medical mr-1"></i>
+                            Observações</label>
+                        <textarea id="observacoes_atendimento" name="observacoes_agendamento"
+                            class="form-control @error('observacoes_agendamento') is-invalid @enderror" rows="3"
+                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('observacoes_agendamento', $atendimento->observacoes_agendamento) }}</textarea>
+                        @error('observacoes_agendamento')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>

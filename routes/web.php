@@ -66,3 +66,4 @@ Route::get('/notificacoes', [App\Http\Controllers\NotificacaoController::class, 
 Route::get('/notificacoes/json', [NotificacaoController::class, 'json'])->name('notificacoes.json');
 Route::get('/notificacoes/{id}', [App\Http\Controllers\NotificacaoController::class, 'show'])->name('notificacoes.show');
 Route::post('/notificacoes/{id}/marcar-como-lida', [App\Http\Controllers\NotificacaoController::class, 'marcarComoLida'])->name('notificacoes.marcarComoLida');
+Route::post('/notificacoes/marcar-todas-como-lida', [App\Http\Controllers\NotificacaoController::class, 'marcarTodasComoLida'])->name('notificacoes.marcarTodasComoLida');

@@ -23,19 +23,17 @@ class SendNotificacaoAniversario
      */
     public function handle(NotificacaoAniversario $event): void
     {
-        $profissionais = Profissional::whereDate('data_nascimento', '=', now()->format('m-d'))->get();
+        $profissional = $event->profissional;
 
-        foreach ($profissionais as $profissional) {
-            Notificacao::create([
-                'tipo' => 'aniversario',
-                'titulo' => '🎉 Hoje é aniversário de ' . $profissional->nome_completo,
-                'dados' => [
-                    'id_profissional' => $profissional->id,
-                    'nome' => $profissional->nome_completo,
-                    'data' => $profissional->data_nascimento,
-                ],
-                'id_pessoas_destinatario' => 1,
-            ]);
-        }
+        Notificacao::create([
+            'tipo' => 'aniversario',
+            'titulo' => 'Hoje é aniversário de ' . $profissional->nome_completo,
+            'dados' => [
+                'id_profissional' => $profissional->id,
+                'nome' => $profissional->nome_completo,
+                'data' => $profissional->data_nascimento,
+            ],
+            'user_id' => 1,
+        ]);
     }
 }

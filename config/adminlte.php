@@ -300,25 +300,19 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
         [
             'type' => 'navbar-notification',
             'id' => 'my-notification',
             'icon' => 'fas fa-bell',
             'label' => 0,
             'label_color' => 'danger',
-            'url' => '',
+            'url' => '/notificacoes',
             'dropdown_mode' => true,
-            'dropdown_flabel' => '',
+            'dropdown_flabel' => 'Ver todas as notificações',
             'topnav_right' => true,
             'update_cfg' => [
-                'url' => 'notificacoes/json',
-                'period' => 60,
+                'url' => '/notificacoes/json',
+                'period' => 15,
             ],
         ],
 
@@ -359,6 +353,12 @@ return [
             'text' => 'Relatórios',
             'url' => '/relatorios',
             'icon' => 'fas fa-file-download',
+        ],
+        ['header' => 'Notificações'],
+        [
+            'text' => 'Notificações',
+            'url' => '/notificacoes',
+            'icon' => 'fas fa-bell',
         ],
         ['header' => 'Central de Configurações'],
         [

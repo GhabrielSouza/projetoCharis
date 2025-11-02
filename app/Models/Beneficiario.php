@@ -23,6 +23,7 @@ class Beneficiario extends Model
         'cidade_id',
         'cep',
         'escolaridade',
+        'ocupacao',
         'cadunico',
         'limitacoes',
         'outras_limitacoes',

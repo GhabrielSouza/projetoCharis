@@ -38,6 +38,8 @@
                                 @if(isset($beneficiario->cidade))
                                     <p><strong>Cidade:</strong><br>{{ $beneficiario->cidade->nome }}</p>
                                 @endif
+                                <p><strong>Ocupação:</strong><br>{{ $beneficiario->ocupacao ?? 'Não informado' }}</p>
+                                <p><strong>Escolaridade:</strong><br>{{ $beneficiario->escolaridade ?? 'Não informado' }}</p>
                             </div>
                         </div>
                     </div>
