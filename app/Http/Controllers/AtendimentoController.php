@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Agendamento;
 use App\Models\AtendimentoRealizado;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Beneficiario;
 use App\Models\Profissional;
@@ -81,18 +82,23 @@ class AtendimentoController extends Controller
             'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id',
         ]);
 
-        AtendimentoRealizado::create($request->all());
+        try {
+            AtendimentoRealizado::create($request->all());
 
-        // Se um agendamento foi associado, atualizar seu status para "realizado"
-        if ($request->filled('agendamento_origem_id')) {
-            $agendamento = Agendamento::find($request->input('agendamento_origem_id'));
-            if ($agendamento) {
-                $agendamento->status_agendamento = 'realizado';
-                $agendamento->save();
+            // Se um agendamento foi associado, atualizar seu status para "realizado"
+            if ($request->filled('agendamento_origem_id')) {
+                $agendamento = Agendamento::find($request->input('agendamento_origem_id'));
+                if ($agendamento) {
+                    $agendamento->status_agendamento = 'realizado';
+                    $agendamento->save();
+                }
             }
+
+            return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado cadastrado com sucesso.');
+        } catch (Exception $e) {
+            return redirect()->route('atendimentos.index')->with('error', 'Erro ao cadastrar atendimento realizado. Tente novamente.' . $e->getMessage());
         }
 
-        return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado cadastrado com sucesso.');
     }
 
     public function update(Request $request, $id)
@@ -110,16 +116,25 @@ class AtendimentoController extends Controller
             'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
         ]);
 
-        $atendimento->update($request->all());
+        try {
+            $atendimento->update($request->all());
 
-        return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado atualizado com sucesso.');
+            return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado atualizado com sucesso.');
+        } catch (Exception $e) {
+            return redirect()->route('atendimentos.index')->with('error', 'Erro ao atualizar atendimento realizado. Tente novamente.' . $e->getMessage());
+        }
     }
 
     public function destroy($id)
     {
-        $atendimento = AtendimentoRealizado::findOrFail($id);
-        $atendimento->delete();
+        try {
+            $atendimento = AtendimentoRealizado::findOrFail($id);
+            $atendimento->delete();
 
-        return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado excluído com sucesso.');
+            return redirect()->route('atendimentos.index')->with('success', 'Atendimento realizado excluído com sucesso.');
+        } catch (Exception $e) {
+            return redirect()->route('atendimentos.index')->with('error', 'Erro ao excluir atendimento realizado. Tente novamente.' . $e->getMessage());
+        }
+
     }
 }
