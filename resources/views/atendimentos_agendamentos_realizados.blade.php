@@ -145,7 +145,8 @@
                                                 </button>
                                             </form>
 
-                                            <form action="{{ route('agendamento.prontuario', $agendamento->id) }}"
+                                            <form
+                                                action="{{ route('agendamento.prontuario', $atendimento->agendamento_origem_id) }}"
                                                 method="GET" class="d-inline">
                                                 <button class="btn btn-sm btn-info" title="Gerar Prontuário" onclick="">
                                                     <i class="fas fa-file-pdf"></i>
