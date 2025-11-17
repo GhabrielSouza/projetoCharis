@@ -118,15 +118,17 @@ class AgendamentoController extends Controller
 
 
             // criar atendimento relacionado
-            AtendimentoRealizado::create([
-                'beneficiario_id' => $agendamento->beneficiario_id,
-                'profissional_id' => $agendamento->profissional_id,
-                'area_atendimento_id' => $agendamento->area_atendimento_id,
-                'data_hora_atendimento' => $agendamento->data_hora_agendamento,
-                'hora_registro' => $agendamento->hora_registro,
-                'descricao_atendimento' => 'Atendimento realizado conforme agendamento.',
-                'agendamento_origem_id' => $agendamento->id,
-            ]);
+            $atendimento = new AtendimentoRealizado();
+            $atendimento->beneficiario_id = $agendamento->beneficiario_id;
+            $atendimento->profissional_id = $agendamento->profissional_id;
+            $atendimento->tipo_de_atendimento_id = $agendamento->tipo_de_atendimento_id;
+            $atendimento->area_atendimento_id = $agendamento->area_atendimento_id;
+            $atendimento->data_hora_atendimento = $agendamento->data_hora_agendamento;
+            $atendimento->hora_registro = $agendamento->hora_registro;
+            $atendimento->descricao_atendimento = 'Atendimento realizado conforme agendamento.';
+            $atendimento->agendamento_origem_id = $agendamento->id;
+            $atendimento->save();
+
             return redirect()->route('atendimentos.index')->with('success', 'Agendamento confirmado com sucesso.');
         } catch (Exception $e) {
             return redirect()->route('atendimentos.index')->with('error', 'Erro ao confirmar agendamento. Tente novamente.' . $e->getMessage());
