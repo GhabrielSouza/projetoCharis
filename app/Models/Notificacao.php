@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Notificacao extends Model
+{
+    protected $table = 'notificacoes';
+
+    protected $fillable = [
+        'tipo',
+        'titulo',
+        'dados',
+        'user_id',
+        'data_leitura',
+    ];
+
+    protected $casts = [
+        'dados' => 'array',
+        'data_leitura' => 'datetime',
+    ];
+
+
+    public function destinatario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+}

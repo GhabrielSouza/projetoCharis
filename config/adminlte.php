@@ -30,8 +30,9 @@ return [
     |
     */
 
-    'use_ico_only' => true,
-    'use_full_favicon' => false,
+    'use_ico_only' => false,
+    'use_full_favicon' => true,
+    'favicon' => 'favicons/favicon.ico',
 
     /*
     |--------------------------------------------------------------------------
@@ -260,7 +261,7 @@ return [
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -299,11 +300,20 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
+            'type' => 'navbar-notification',
+            'id' => 'my-notification',
+            'icon' => 'fas fa-bell',
+            'label' => 0,
+            'label_color' => 'danger',
+            'url' => '/notificacoes',
+            'dropdown_mode' => true,
+            'dropdown_flabel' => 'Ver todas as notificações',
             'topnav_right' => true,
+            'update_cfg' => [
+                'url' => '/notificacoes/json',
+                'period' => 15,
+            ],
         ],
 
         // Sidebar items:
@@ -316,27 +326,41 @@ return [
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
+        ['header' => 'Central de Cadastros'],
         [
-            'text' => 'Cadastro de Beneficiário',
-            'url' => '/beneficiario',
+            'text' => 'Beneficiários',
+            'url' => '/beneficiarios',
             'icon' => 'fas fa-user-plus',
         ],
         [
-            'text' => 'Cadastro de Profissional',
+            'text' => 'Profissionais',
             'url' => '/profissional',
             'icon' => 'fas fa-user-md',
         ],
+        ['header' => 'Central de Gerenciamento'],
+        [
+            'text' => 'Gerenciar Atendimento',
+            'url' => '/atendimentos',
+            'icon' => 'fas fa-file-signature',
+        ],
+        [
+            'text' => 'Gerenciar Cestas Básicas',
+            'url' => '/cestas',
+            'icon' => 'fas fa-shopping-basket',
+        ],
+        ['header' => 'Central de Relatórios'],
         [
             'text' => 'Relatórios',
-            'url' => 'admin/pages',
-            'icon' => 'fas fa-file-alt',
+            'url' => '/relatorios',
+            'icon' => 'fas fa-file-download',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'Notificações'],
         [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Notificações',
+            'url' => '/notificacoes',
+            'icon' => 'fas fa-bell',
         ],
+        ['header' => 'Central de Configurações'],
         [
             'text' => 'change_password',
             'url' => 'admin/settings',

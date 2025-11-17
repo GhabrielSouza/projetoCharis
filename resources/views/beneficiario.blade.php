@@ -7,48 +7,23 @@
 @stop
 
 @section('content')
-    <div class="card">
-        <div class="card-header bg-orange text-white">
+    <div class="card card-orange card-outline">
+        <div class="card-header ">
             <h3 class="card-title"><i class="fas fa-users mr-2"></i>Cadastro de Beneficiários</h3>
             <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Recolher">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="maximize" title="Expandir">
-                    <i class="fas fa-expand"></i>
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
+                        title="Adicionar beneficiário">
+                        <i class="fas fa-user-plus mr-1"></i> Novo Beneficiario
+                    </button>
+                </div>
             </div>
         </div>
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="btn-group">
-                        <button class="btn btn-outline-success" data-toggle="modal" data-target="#modalCadastroBeneficiario"
-                            title="Adicionar beneficiário">
-                            <i class="fas fa-user-plus mr-1"></i> Novo
-                        </button>
-                        <button class="btn btn-outline-primary" title="Imprimir relatório">
-                            <i class="fas fa-print mr-1"></i> Imprimir
-                        </button>
-                        <button class="btn btn-outline-info" title="Exportar dados">
-                            <i class="fas fa-file-export mr-1"></i> Exportar
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Pesquisar beneficiários..." id="searchInput">
-                        <div class="input-group-append">
-                            <button class="btn btn-success" id="searchButton">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="table-responsive">
-                <table class="table table-hover table-striped">
+                <table id="beneficiariosTable" class="table table-hover table-striped">
                     <thead class="thead-light">
                         <tr>
                             <th>#</th>
@@ -69,8 +44,8 @@
                                 <td>{{ $beneficiario->cpf }}</td>
                                 <td>{{ \Carbon\Carbon::parse($beneficiario->data_nascimento)->age }} anos</td>
                                 <td>
-                                    @if($beneficiario->endereco && $beneficiario->endereco->cidade)
-                                        {{ $beneficiario->endereco->cidade->nome }}/{{ $beneficiario->endereco->cidade->estado->sigla }}
+                                    @if($beneficiario->cidade)
+                                        {{ $beneficiario->cidade->nome }}
                                     @else
                                         N/A
                                     @endif
@@ -87,10 +62,12 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm">
-
-                                        <button class="btn btn-info" title="Visualizar completo">
+                                        <a href="{{ route('beneficiarios.perfil', $beneficiario) }}"
+                                            class="btn btn-info d-flex align-items-center justify-content-center"
+                                            title="Visualizar perfil">
                                             <i class="fas fa-eye"></i>
-                                        </button>
+                                        </a>
+
 
                                         <button data-toggle="modal"
                                             data-target="#modalEditarBeneficiario-{{ $beneficiario->id }}"
@@ -98,8 +75,13 @@
                                             <i class="fas fa-edit"></i>
                                         </button>
 
+                                        <button data-toggle="modal" data-target="#modalCadastroCestas-{{ $beneficiario->id }}"
+                                            class="btn btn-primary" title="Registro de Cesta Básica">
+                                            <i class="fas fa-shopping-basket"></i>
+                                        </button>
+
                                         <form action="{{ route('beneficiarios.toggleStatus', $beneficiario->id) }}"
-                                            method="POST" style="display: inline;">
+                                            method="POST" style="display: inline;" class="form-toggle-status">
                                             @csrf
 
                                             @if ($beneficiario->status == 'ativo')
@@ -119,7 +101,6 @@
                                 </td>
                             </tr>
 
-                            {{-- Modal de Edição (agora com include) --}}
                             <div class="modal fade" id="modalEditarBeneficiario-{{ $beneficiario->id }}" tabindex="-1"
                                 role="dialog" aria-labelledby="tituloModalEdicao-{{ $beneficiario->id }}" aria-hidden="true">
                                 <div class="modal-dialog modal-lg" role="document">
@@ -129,37 +110,21 @@
                                 </div>
                             </div>
 
+                            <div class="modal fade" id="modalCadastroCestas-{{ $beneficiario->id }}" tabindex="-1" role="dialog"
+                                aria-labelledby="tituloModalCadastro-{{ $beneficiario->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        @include('modal._form_cadastro_cesta_basica', ['beneficiario' => $beneficiario])
+                                    </div>
+                                </div>
+                            </div>
+
                         @endforeach
                     </tbody>
                 </table>
             </div>
 
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <div class="dataTables_info">
-                        Mostrando <strong>1</strong> a <strong>3</strong> de <strong>125</strong> beneficiários
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <ul class="pagination pagination-sm justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#"><i class="fas fa-angle-left"></i></a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">3</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"><i class="fas fa-angle-right"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+
         </div>
         <div class="card-footer text-muted small">
             <div class="row">
@@ -187,76 +152,6 @@
         </div>
     </div>
 @endsection
-
-<!-- @section('js')
-    @if(session('success'))
-        <script>
-            Swal.fire({
-                title: 'Sucesso!',
-                icon: "success",
-                text: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        </script>
-    @endif
-
-    @if(session('error'))
-        <script>
-            setTimeout(() => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erro!',
-                    text: '{{ session('error') }}',
-                    confirmButtonText: 'Entendi'
-                });
-            }, 500);
-        </script>
-    @endif
-
-    <script>
-        $(document).ready(function () {
-            // Reabre modal de cadastro se tiver erro no cadastro
-            @if ($errors->any())
-                @if (old('nome') || old('cpf'))
-                    console.log('Reabrindo modal de cadastro...');
-                    $('#modalCadastroBeneficiario').modal('show');
-                @endif
-
-                    // Reabre modal de edição se veio com session ID
-                    @if (session('beneficiario_id_com_erro'))
-                        let id = "{{ session('beneficiario_id_com_erro') }}";
-                        console.log('Reabrindo modal de edição com ID:', id);
-                        $('#modalEditarBeneficiario-' + id).modal('show');
-                    @endif
-            @endif
-
-            // Loader para cadastro
-            $('#formCadastroBeneficiario').on('submit', function () {
-                Swal.fire({
-                    title: 'Salvando...',
-                    text: 'Por favor, aguarde.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            });
-
-            // Loader para edição
-            $('form[id^="formEdicaoBeneficiario-"]').on('submit', function () {
-                Swal.fire({
-                    title: 'Salvando Alterações...',
-                    text: 'Por favor, aguarde.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-            });
-        });
-    </script>
-@endsection -->
 
 @section('js')
     @if(session('success'))
@@ -322,6 +217,79 @@
             $('.modal').on('shown.bs.modal', function () {
                 $(this).find('.modal-body').scrollTop(0);
             });
+        });
+
+        $(document).ready(function () {
+
+            $('.form-toggle-status').on('submit', function (e) {
+                e.preventDefault();
+
+                const form = $(this);
+                const url = form.attr('action');
+                const button = form.find('button[type="submit"]');
+                const icon = button.find('i');
+                const originalIconClass = icon.attr('class');
+
+
+                button.prop('disabled', true);
+                icon.removeClass().addClass('fas fa-spinner fa-spin');
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: form.serialize(),
+                    success: function (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Algo deu errado! Tente novamente.'
+                        });
+                        button.prop('disabled', false);
+                        icon.removeClass().addClass(originalIconClass);
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            var table = $('#beneficiariosTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
+                },
+                "order": [[0, "asc"], [1, "asc"]],
+                "pageLength": 10,
+                "lengthChange": false,
+                "searching": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": 4 }
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    },
+                    {
+                        extend: 'pdf',
+                        exportOptions: {
+                            columns: ':not(:last-child)'
+                        }
+                    }
+                ]
+            });
+
         });
     </script>
 @endsection

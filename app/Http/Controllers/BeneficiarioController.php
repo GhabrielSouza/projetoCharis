@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Beneficiario;
+use App\Models\Cidade;
 use Illuminate\Http\Request;
 
 class BeneficiarioController extends Controller
@@ -22,53 +23,67 @@ class BeneficiarioController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        // $beneficiarios = Beneficiario::with(['endereco.cidade.estado'])
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $search = $request->input('search');
 
-        $beneficiarios = Beneficiario::query()
-            ->when(request('search'), function ($query) {
-                return $query->buscar(request('search'));
-            })
-            ->orderBy('nome')
-            ->paginate(10);
+        $query = Beneficiario::query();
 
-        $totalAtivos = $beneficiarios->where('status', 'ativo')->count();
-        $totalInativos = $beneficiarios->where('status', 'inativo')->count();
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nome', 'like', "%{$search}%")
+                    ->orWhere('cpf', 'like', "%{$search}%");
+            });
+        }
 
+        $beneficiarios = $query->orderBy('nome')->paginate(3);
+
+        $beneficiarios->appends(['search' => $search]);
+
+        $totalAtivos = Beneficiario::where('status', 'ativo')->count();
+        $totalInativos = Beneficiario::where('status', 'inativo')->count();
         $ultimaAtualizacao = $beneficiarios->isNotEmpty() ? $beneficiarios->max('updated_at') : now();
+        $cidades = Cidade::orderBy('nome')->get();
+
 
         return view('beneficiario', compact(
             'beneficiarios',
             'totalAtivos',
             'totalInativos',
-            'ultimaAtualizacao'
+            'ultimaAtualizacao',
+            'cidades'
         ));
     }
 
-    // cadastro.beneficiario
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nome' => 'required|string|max:100',
             'cpf' => 'required|string|max:14|unique:beneficiarios',
+            'email' => 'required|string|email|max:100|unique:beneficiarios',
+            'sexo' => 'required|string|max:10',
             'data_nascimento' => 'required|date',
             'telefone' => 'nullable|string|max:20',
             'escolaridade' => 'nullable|string',
+            'ocupacao' => 'nullable|string',
             'cadunico' => 'nullable|string',
             'limitacoes' => 'nullable|array',
             'outras_limitacoes' => 'nullable|string',
             'observacoes' => 'nullable|string',
-            'endereco_id' => 'nullable|exists:enderecos,id'
+            'endereco_logradouro' => 'nullable|string|max:255',
+            'endereco_numero' => 'nullable|string|max:20',
+            'endereco_complemento' => 'nullable|string|max:100',
+            'endereco_bairro' => 'nullable|string|max:100',
+            'cidade_id' => 'required|exists:cidades,id',
+            'cep' => 'nullable|string|max:10',
         ]);
 
         try {
             $beneficiario = Beneficiario::create($validated);
 
-            return redirect()->route('cadastro.beneficiario')
+            return redirect()->route('beneficiarios.index')
                 ->with('success', 'Beneficiário cadastrado com sucesso!');
 
         } catch (\Exception $e) {
@@ -85,15 +100,23 @@ class BeneficiarioController extends Controller
 
         $validated = $request->validate([
             'nome' => 'required|string|max:255',
+            'sexo' => 'required|string|max:10',
+            'email' => 'required|string|email|max:100|unique:beneficiarios,email,' . $beneficiario->id,
             'cpf' => 'required|string|max:14|unique:beneficiarios,cpf,' . $beneficiario->id,
             'data_nascimento' => 'required|date',
             'telefone' => 'nullable|string|max:20',
             'escolaridade' => 'nullable|string',
+            'ocupacao' => 'nullable|string',
             'cadunico' => 'nullable|string',
             'limitacoes' => 'nullable|array',
             'outras_limitacoes' => 'nullable|string',
             'observacoes' => 'nullable|string',
-            'endereco_id' => 'nullable|exists:enderecos,id'
+            'endereco_logradouro ' => 'nullable|string|max:255',
+            'endereco_numero' => 'nullable|string|max:20',
+            'endereco_complemento' => 'nullable|string|max:100',
+            'endereco_bairro' => 'nullable|string|max:100',
+            'cidade_id' => 'required|exists:cidades,id',
+            'cep' => 'nullable|string|max:10',
         ]);
 
         try {
@@ -128,7 +151,14 @@ class BeneficiarioController extends Controller
 
         $mensagem = "Beneficiário " . ($novoStatus == 'ativo' ? 'ativado' : 'inativado') . " com sucesso!";
 
-        return redirect()->back()->with('success', $mensagem);
+        return response()->json(['message' => $mensagem]);
+    }
+
+    public function perfil(Beneficiario $beneficiario)
+    {
+        $beneficiario->load(['cidade', 'agendamentos', 'atendimentosRealizados', 'cestasBasicasEntregues']);
+
+        return view('beneficiario-perfil', compact('beneficiario'));
     }
 
     public function destroy($id)
