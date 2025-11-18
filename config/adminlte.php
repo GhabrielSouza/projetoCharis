@@ -348,6 +348,12 @@ return [
             'url' => '/cestas',
             'icon' => 'fas fa-shopping-basket',
         ],
+        ['header' => 'Central de Pedagogia'],
+        [
+            'text' => 'Gerenciar Salas de Aula',
+            'url' => '/salas',
+            'icon' => 'fas fa-graduation-cap',
+        ],
         ['header' => 'Central de Relatórios'],
         [
             'text' => 'Relatórios',
