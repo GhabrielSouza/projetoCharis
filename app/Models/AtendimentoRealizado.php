@@ -16,6 +16,7 @@ class AtendimentoRealizado extends Model
     protected $fillable = [
         'beneficiario_id',
         'profissional_id',
+        'tipo_de_atendimento_id',
         'area_atendimento_id',
         'data_hora_atendimento',
         'descricao_atendimento',

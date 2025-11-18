@@ -21,7 +21,7 @@ class AgendamentoController extends Controller
             ->whereDoesntHave('atendimentoRealizado')
             ->where('status_agendamento', 'pendente')
             ->orderBy('data_hora_agendamento', 'asc')
-            ->paginate(5);
+            ->get();
 
         $totalAgendamentosPendentes = Agendamento::where('status_agendamento', 'pendente')->count();
 

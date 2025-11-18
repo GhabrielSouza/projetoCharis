@@ -291,6 +291,7 @@
                 "pageLength": 10,
                 "lengthChange": false,
                 "searching": true,
+                "paging": true,
                 "columnDefs": [
                     { "orderable": false, "targets": 4 }
                 ],

@@ -36,9 +36,8 @@ class BeneficiarioController extends Controller
             });
         }
 
-        $beneficiarios = $query->orderBy('nome')->paginate(3);
+        $beneficiarios = $query->orderBy('nome')->get();
 
-        $beneficiarios->appends(['search' => $search]);
 
         $totalAtivos = Beneficiario::where('status', 'ativo')->count();
         $totalInativos = Beneficiario::where('status', 'inativo')->count();

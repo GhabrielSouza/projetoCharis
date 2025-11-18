@@ -144,14 +144,15 @@
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
-
-                                            <form
-                                                action="{{ route('agendamento.prontuario', $atendimento->agendamento_origem_id) }}"
-                                                method="GET" class="d-inline">
-                                                <button class="btn btn-sm btn-info" title="Gerar Prontuário" onclick="">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </button>
-                                            </form>
+                                            @if ($atendimento->agendamento_origem_id)
+                                                <form
+                                                    action="{{ route('agendamento.prontuario', $atendimento->agendamento_origem_id) }}"
+                                                    method="GET" class="d-inline">
+                                                    <button class="btn btn-sm btn-info" title="Gerar Prontuário" onclick="">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
 
                                         </td>
                                     </tr>
@@ -166,16 +167,16 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addAtendimentoModal" tabindex="-1" role="dialog" aria-labelledby="addAtendimentoLabel"
-        aria-hidden="true">
+    <div class="modal fade modalAtendimento" id="addAtendimentoModal" tabindex="-1" role="dialog"
+        aria-labelledby="addAtendimentoLabel" aria-hidden="true" name="modalAtendimento">
         <div class="modal-dialog modal-lg" role="document">
             @include('modal._form_cadastro_atendimento', ['beneficiarios' => $beneficiarios, 'profissionais' => $profissionais, 'areas', 'horariosDisponiveis'])
         </div>
     </div>
 
     @foreach($atendimentos as $atendimento)
-        <div class="modal fade" id="addAtendimentoModal-{{ $atendimento->id }}" tabindex="-1" role="dialog"
-            aria-labelledby="addAtendimentoLabel" aria-hidden="true">
+        <div class="modal fade modalAtendimento" id="addAtendimentoModal-{{ $atendimento->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="addAtendimentoLabel" name="modalAtendimento" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 @include('modal._form_edicao_atendimento', ['atendimento' => $atendimento, 'beneficiarios' => $beneficiarios, 'profissionais' => $profissionais, 'areas' => $areas, 'horariosDisponiveis' => $horariosDisponiveis])
             </div>
@@ -240,8 +241,10 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('vendor/adminlte/dist/css/adminlte.min.css') }}">
-<!-- DataTables Buttons CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
 <style>
     .table-responsive {
         overflow-x: auto;
@@ -267,13 +270,44 @@
 @stop
 
 @section('js')
-    <!-- DataTables Buttons JS e dependências -->
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: 'Sucesso!',
+                icon: "success",
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
+
+    @if(session('error'))
+        <script>
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: '{{ session('error') }}',
+                    confirmButtonText: 'Entendi'
+                });
+            }, 500);
+        </script>
+    @endif
 
     <script>
         $(document).ready(function () {
@@ -283,9 +317,10 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
                 },
                 "order": [[0, "asc"], [1, "asc"]],
-                "pageLength": 10,
-                "lengthChange": false,
+                "pageLength": 5,
+                "lengthChange": true,
                 "searching": true,
+                "paging": true,
                 "columnDefs": [
                     { "orderable": false, "targets": 4 }
                 ],
@@ -312,9 +347,10 @@
                     "url": "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json"
                 },
                 "order": [[0, "asc"], [1, "asc"]],
-                "pageLength": 10,
-                "lengthChange": false,
+                "pageLength": 5,
+                "lengthChange": true,
                 "searching": true,
+                "paging": true,
                 "columnDefs": [
                     { "orderable": false, "targets": 6 }
                 ],
@@ -386,5 +422,17 @@
                 });
             });
         });
+
+        $('.modalAtendimento').on('submit', function () {
+            Swal.fire({
+                title: 'Salvando...',
+                text: 'Por favor, aguarde.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        });
+
     </script>
 @endsection

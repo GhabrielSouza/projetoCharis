@@ -25,13 +25,13 @@ class AtendimentoController extends Controller
     {
         $atendimentos = AtendimentoRealizado::with('beneficiario', 'profissional', 'areaAtendimento', 'agendamentoOrigem', 'tipoDeAtendimento')
             ->orderBy('created_at', 'desc')
-            ->paginate(5);
+            ->get();
 
         $agendamentosPendentes = Agendamento::with('beneficiario', 'profissional', 'areaAtendimento', 'atendimentoRealizado', 'tipoDeAtendimento')
             ->whereDoesntHave('atendimentoRealizado')
             ->where('status_agendamento', 'pendente')
             ->orderBy('data_hora_agendamento', 'asc')
-            ->paginate(5);
+            ->get();
 
         $atendimentosHoje = AtendimentoRealizado::whereDate('created_at', today())->count();
         $totalAgendamentosPendentes = Agendamento::where('status_agendamento', 'pendente')->count();
@@ -83,7 +83,16 @@ class AtendimentoController extends Controller
         ]);
 
         try {
-            AtendimentoRealizado::create($request->all());
+            $atendimento = new AtendimentoRealizado();
+            $atendimento->beneficiario_id = $request->input('beneficiario_id');
+            $atendimento->profissional_id = $request->input('profissional_id');
+            $atendimento->tipo_de_atendimento_id = $request->input('tipo_de_atendimento_id');
+            $atendimento->area_atendimento_id = $request->input('area_atendimento_id');
+            $atendimento->data_hora_atendimento = $request->input('data_hora_atendimento');
+            $atendimento->hora_registro = $request->input('hora_registro');
+            $atendimento->descricao_atendimento = $request->input('descricao_atendimento');
+            $atendimento->agendamento_origem_id = $request->input('agendamento_origem_id');
+            $atendimento->save();
 
             // Se um agendamento foi associado, atualizar seu status para "realizado"
             if ($request->filled('agendamento_origem_id')) {
@@ -111,7 +120,7 @@ class AtendimentoController extends Controller
             'area_atendimento_id' => 'required|exists:areas_atuacao,id',
             'data_hora_atendimento' => 'required|date|before_or_equal:now',
             'hora_registro' => 'required|string|max:5',
-            'descricao_atendimento' => 'required|string|max:2000',
+            'descricao_atendimento' => 'nullable|string|max:2000',
             'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id,' . $atendimento->id,
             'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
         ]);

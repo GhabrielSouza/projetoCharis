@@ -9,6 +9,7 @@ use App\Models\AreaAtucao;
 use Carbon\CarbonPeriod;
 use App\Models\TipoDeAtendimento;
 
+
 class ProfissionalController extends Controller
 {
     /**
@@ -50,9 +51,8 @@ class ProfissionalController extends Controller
             });
         }
 
-        $profissionais = $query->orderBy('nome_completo')->with('areaAtuacao:id,nome_area')->paginate(3);
+        $profissionais = $query->orderBy('nome_completo')->with('areaAtuacao:id,nome_area')->get();
 
-        $profissionais->appends(['search' => $search]);
 
         $areas = AreaAtucao::orderBy('nome_area')->get();
         $tiposDeAtendimento = TipoDeAtendimento::orderBy('nome')->get();

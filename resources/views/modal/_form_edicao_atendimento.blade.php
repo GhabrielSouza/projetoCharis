@@ -106,18 +106,18 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label for="tipo_atendimento_id"><i class="fas fa-stethoscope mr-1"></i>
+                        <label for="tipo_de_atendimento_id"><i class="fas fa-stethoscope mr-1"></i>
                             Tipo de Atendimento</label>
-                        <select id="tipo_atendimento_id" name="tipo_atendimento"
-                            class="form-control @error('tipo_atendimento') is-invalid @enderror" required>
+                        <select id="tipo_de_atendimento_id" name="tipo_de_atendimento_id"
+                            class="form-control @error('tipo_de_atendimento_id') is-invalid @enderror" required>
                             <option value="">Selecione o tipo</option>
                             @foreach($tiposDeAtendimento as $tipo)
-                                <option value="{{ $tipo->id }}" {{ old('tipo_atendimento') == $tipo->id ? 'selected' : '' }}>
+                                <option value="{{ $tipo->id }}" {{ old('tipo_de_atendimento_id', $atendimento->tipo_de_atendimento_id) == $tipo->id ? 'selected' : '' }}>
                                     {{ $tipo->nome }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('tipo_atendimento')
+                        @error('tipo_de_atendimento_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -126,12 +126,12 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="observacoes_atendimento"><i class="fas fa-comment-medical mr-1"></i>
+                        <label for="descricao_atendimento"><i class="fas fa-comment-medical mr-1"></i>
                             Observações</label>
-                        <textarea id="observacoes_atendimento" name="observacoes_agendamento"
-                            class="form-control @error('observacoes_agendamento') is-invalid @enderror" rows="3"
-                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('observacoes_agendamento', $atendimento->observacoes_agendamento) }}</textarea>
-                        @error('observacoes_agendamento')
+                        <textarea id="descricao_atendimento" name="descricao_atendimento"
+                            class="form-control @error('descricao_atendimento') is-invalid @enderror" rows="3"
+                            placeholder="Informe sintomas, histórico relevante ou outras observações">{{ old('descricao_atendimento', $atendimento->descricao_atendimento) }}</textarea>
+                        @error('descricao_atendimento')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
