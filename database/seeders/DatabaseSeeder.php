@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        User::factory()->create([
+            'name' => 'Miriam Moulin',
+            'email' => 'miriam@gmail.com',
+            'password' => bcrypt('#Charis2025'),
+        ]);
+
         $this->call(EstadoSeeder::class);
         $this->call(AreaAtuacaoSeeder::class);
         $this->call(CidadeSeeder::class);
