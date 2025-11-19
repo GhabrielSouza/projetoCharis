@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\Agendamento;
 use App\Models\AtendimentoRealizado;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Nette\Schema\Expect;
 use function PHPUnit\Framework\returnArgument;
 
