@@ -67,3 +67,8 @@ Route::get('/notificacoes/json', [NotificacaoController::class, 'json'])->name('
 Route::get('/notificacoes/{id}', [App\Http\Controllers\NotificacaoController::class, 'show'])->name('notificacoes.show');
 Route::post('/notificacoes/{id}/marcar-como-lida', [App\Http\Controllers\NotificacaoController::class, 'marcarComoLida'])->name('notificacoes.marcarComoLida');
 Route::post('/notificacoes/marcar-todas-como-lida', [App\Http\Controllers\NotificacaoController::class, 'marcarTodasComoLida'])->name('notificacoes.marcarTodasComoLida');
+
+Route::resource('salas', App\Http\Controllers\SalasController::class);
+
+Route::post('/salas/{id}/adicionar-alunos', [App\Http\Controllers\SalasController::class, 'storeStudents'])->name('salas.adicionarAlunos');
+Route::delete('/salas/{sala_id}/remover-aluno/{beneficiario_id}', [App\Http\Controllers\SalasController::class, 'removeStudents'])->name('salas.removerAluno');

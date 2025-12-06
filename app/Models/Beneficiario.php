@@ -61,4 +61,9 @@ class Beneficiario extends Model
     {
         return $this->hasMany(CestaBasicaEntregue::class);
     }
+    public function salasDeAula()
+    {
+        return $this->belongsToMany(Sala::class, 'sala_beneficiario', 'beneficiario_id', 'sala_id')
+            ->withTimestamps();
+    }
 }
