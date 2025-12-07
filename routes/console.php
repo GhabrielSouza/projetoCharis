@@ -19,4 +19,4 @@ Schedule::call(function () {
     foreach ($profissionais as $profissional) {
         NotificacaoAniversario::dispatch($profissional);
     }
-})->dailyAt('08:00');
+});
