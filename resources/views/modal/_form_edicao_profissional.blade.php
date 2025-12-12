@@ -56,7 +56,7 @@
                 <div class="form-group col-md-4">
                     <label for="email-{{ $profissional->email }}"><i class="fas fa-envelope mr-1"></i>Email</label>
                     <input type="email" id="email-{{ $profissional->id }}"
-                        value="{{ old('email', $profissional->email) }}" class="form-control" name="email" required>
+                        value="{{ old('email', $profissional->email) }}" class="form-control" name="email">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="area_atuacao_id">Área de Atuação</label>

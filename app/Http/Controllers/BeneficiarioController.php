@@ -58,26 +58,46 @@ class BeneficiarioController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nome' => 'required|string|max:100',
-            'cpf' => 'required|string|max:14|unique:beneficiarios',
-            'email' => 'required|string|email|max:100|unique:beneficiarios',
-            'sexo' => 'required|string|max:10',
-            'data_nascimento' => 'required|date',
-            'telefone' => 'nullable|string|max:20',
-            'escolaridade' => 'nullable|string',
-            'ocupacao' => 'nullable|string',
-            'cadunico' => 'nullable|string',
-            'limitacoes' => 'nullable|array',
-            'outras_limitacoes' => 'nullable|string',
-            'observacoes' => 'nullable|string',
-            'endereco_logradouro' => 'nullable|string|max:255',
-            'endereco_numero' => 'nullable|string|max:20',
-            'endereco_complemento' => 'nullable|string|max:100',
-            'endereco_bairro' => 'nullable|string|max:100',
-            'cidade_id' => 'required|exists:cidades,id',
-            'cep' => 'nullable|string|max:10',
-        ]);
+        $validated = $request->validate(
+            [
+                'nome' => 'required|string|max:100',
+                'cpf' => 'required|string|max:14|unique:beneficiarios',
+                'email' => 'nullable|string|email|max:100|unique:beneficiarios',
+                'sexo' => 'required|string|max:10',
+                'data_nascimento' => 'required|date',
+                'telefone' => 'nullable|string|max:20',
+                'escolaridade' => 'nullable|string',
+                'ocupacao' => 'nullable|string',
+                'cadunico' => 'nullable|string',
+                'limitacoes' => 'nullable|array',
+                'outras_limitacoes' => 'nullable|string',
+                'observacoes' => 'nullable|string',
+                'endereco_logradouro' => 'nullable|string|max:255',
+                'endereco_numero' => 'nullable|string|max:20',
+                'endereco_complemento' => 'nullable|string|max:100',
+                'endereco_bairro' => 'nullable|string|max:100',
+                'cidade_id' => 'required|exists:cidades,id',
+                'cep' => 'required|string|max:10',
+            ],
+            [
+                'cidade_id.exists' => 'A cidade selecionada é inválida.',
+                'nome.required' => 'O campo nome é obrigatório.',
+                'cpf.required' => 'O campo CPF é obrigatório.',
+                'data_nascimento.required' => 'O campo data de nascimento é obrigatório.',
+                'sexo.required' => 'O campo sexo é obrigatório.',
+                'cpf.unique' => 'O CPF informado já está cadastrado.',
+                'email.unique' => 'O email informado já está cadastrado.',
+                'cidade_id.required' => 'O campo cidade é obrigatório.',
+                'cep.required' => 'O campo CEP é obrigatório.',
+                'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida.',
+                'email.email' => 'O campo email deve ser um endereço de email válido.',
+                'endereco_logradouro.max' => 'O campo logradouro deve ter no máximo 255 caracteres.',
+                'endereco_numero.max' => 'O campo número deve ter no máximo 20 caracteres.',
+                'endereco_complemento.max' => 'O campo complemento deve ter no máximo 100 caracteres.',
+                'endereco_bairro.max' => 'O campo bairro deve ter no máximo 100 caracteres.',
+                'cep.max' => 'O campo CEP deve ter no máximo 10 caracteres.',
+            ]
+        );
 
         try {
             $beneficiario = Beneficiario::create($validated);
@@ -97,26 +117,46 @@ class BeneficiarioController extends Controller
 
         $beneficiario = Beneficiario::findOrFail($id);
 
-        $validated = $request->validate([
-            'nome' => 'required|string|max:255',
-            'sexo' => 'required|string|max:10',
-            'email' => 'required|string|email|max:100|unique:beneficiarios,email,' . $beneficiario->id,
-            'cpf' => 'required|string|max:14|unique:beneficiarios,cpf,' . $beneficiario->id,
-            'data_nascimento' => 'required|date',
-            'telefone' => 'nullable|string|max:20',
-            'escolaridade' => 'nullable|string',
-            'ocupacao' => 'nullable|string',
-            'cadunico' => 'nullable|string',
-            'limitacoes' => 'nullable|array',
-            'outras_limitacoes' => 'nullable|string',
-            'observacoes' => 'nullable|string',
-            'endereco_logradouro ' => 'nullable|string|max:255',
-            'endereco_numero' => 'nullable|string|max:20',
-            'endereco_complemento' => 'nullable|string|max:100',
-            'endereco_bairro' => 'nullable|string|max:100',
-            'cidade_id' => 'required|exists:cidades,id',
-            'cep' => 'nullable|string|max:10',
-        ]);
+        $validated = $request->validate(
+            [
+                'nome' => 'required|string|max:255',
+                'sexo' => 'required|string|max:10',
+                'email' => 'nullable|string|email|max:100|unique:beneficiarios,email,' . $beneficiario->id,
+                'cpf' => 'required|string|max:14|unique:beneficiarios,cpf,' . $beneficiario->id,
+                'data_nascimento' => 'required|date',
+                'telefone' => 'nullable|string|max:20',
+                'escolaridade' => 'nullable|string',
+                'ocupacao' => 'nullable|string',
+                'cadunico' => 'nullable|string',
+                'limitacoes' => 'nullable|array',
+                'outras_limitacoes' => 'nullable|string',
+                'observacoes' => 'nullable|string',
+                'endereco_logradouro ' => 'nullable|string|max:255',
+                'endereco_numero' => 'nullable|string|max:20',
+                'endereco_complemento' => 'nullable|string|max:100',
+                'endereco_bairro' => 'nullable|string|max:100',
+                'cidade_id' => 'required|exists:cidades,id',
+                'cep' => 'nullable|string|max:10',
+            ],
+            [
+                'cidade_id.exists' => 'A cidade selecionada é inválida.',
+                'nome.required' => 'O campo nome é obrigatório.',
+                'cpf.required' => 'O campo CPF é obrigatório.',
+                'data_nascimento.required' => 'O campo data de nascimento é obrigatório.',
+                'sexo.required' => 'O campo sexo é obrigatório.',
+                'cpf.unique' => 'O CPF informado já está cadastrado.',
+                'email.unique' => 'O email informado já está cadastrado.',
+                'cidade_id.required' => 'O campo cidade é obrigatório.',
+                'cep.required' => 'O campo CEP é obrigatório.',
+                'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida.',
+                'email.email' => 'O campo email deve ser um endereço de email válido.',
+                'endereco_logradouro.max' => 'O campo logradouro deve ter no máximo 255 caracteres.',
+                'endereco_numero.max' => 'O campo número deve ter no máximo 20 caracteres.',
+                'endereco_complemento.max' => 'O campo complemento deve ter no máximo 100 caracteres.',
+                'endereco_bairro.max' => 'O campo bairro deve ter no máximo 100 caracteres.',
+                'cep.max' => 'O campo CEP deve ter no máximo 10 caracteres.',
+            ]
+        );
 
         try {
             $validated['limitacoes'] = json_encode($request->limitacoes);

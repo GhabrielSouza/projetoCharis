@@ -71,16 +71,29 @@ class AtendimentoController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'beneficiario_id' => 'required|exists:beneficiarios,id',
-            'profissional_id' => 'required|exists:profissionais,id',
-            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
-            'area_atendimento_id' => 'required|exists:areas_atuacao,id',
-            'data_hora_atendimento' => 'required|date|before_or_equal:now',
-            'hora_registro' => 'required|string|max:5',
-            'descricao_atendimento' => 'required|string|max:2000',
-            'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id',
-        ]);
+        $request->validate(
+            [
+                'beneficiario_id' => 'required|exists:beneficiarios,id',
+                'profissional_id' => 'required|exists:profissionais,id',
+                'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
+                'area_atendimento_id' => 'required|exists:areas_atuacao,id',
+                'data_hora_atendimento' => 'required|date|before_or_equal:now',
+                'hora_registro' => 'required|string|max:5',
+                'descricao_atendimento' => 'required|string|max:2000',
+                'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id',
+            ],
+            [
+                'agendamento_origem_id.unique' => 'O agendamento selecionado já possui um atendimento realizado associado.',
+                'beneficiario_id.required' => 'O campo beneficiário é obrigatório.',
+                'profissional_id.required' => 'O campo profissional é obrigatório.',
+                'tipo_de_atendimento_id.required' => 'O campo tipo de atendimento é obrigatório.',
+                'area_atendimento_id.required' => 'O campo área de atendimento é obrigatório.',
+                'data_hora_atendimento.required' => 'O campo data e hora do atendimento é obrigatório.',
+                'hora_registro.required' => 'O campo hora do registro é obrigatório.',
+                'descricao_atendimento.required' => 'O campo descrição do atendimento é obrigatório.',
+                'data_hora_atendimento.before_or_equal' => 'A data e hora do atendimento não podem ser futuras.',
+            ]
+        );
 
         try {
             $atendimento = new AtendimentoRealizado();
@@ -114,16 +127,27 @@ class AtendimentoController extends Controller
     {
         $atendimento = AtendimentoRealizado::findOrFail($id);
 
-        $request->validate([
-            'beneficiario_id' => 'required|exists:beneficiarios,id',
-            'profissional_id' => 'required|exists:profissionais,id',
-            'area_atendimento_id' => 'required|exists:areas_atuacao,id',
-            'data_hora_atendimento' => 'required|date|before_or_equal:now',
-            'hora_registro' => 'required|string|max:5',
-            'descricao_atendimento' => 'nullable|string|max:2000',
-            'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id,' . $atendimento->id,
-            'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
-        ]);
+        $request->validate(
+            [
+                'beneficiario_id' => 'required|exists:beneficiarios,id',
+                'profissional_id' => 'required|exists:profissionais,id',
+                'area_atendimento_id' => 'required|exists:areas_atuacao,id',
+                'data_hora_atendimento' => 'required|date|before_or_equal:now',
+                'hora_registro' => 'required|string|max:5',
+                'descricao_atendimento' => 'nullable|string|max:2000',
+                'agendamento_origem_id' => 'nullable|exists:agendamentos,id|unique:atendimentos_realizados,agendamento_origem_id,' . $atendimento->id,
+                'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
+            ],
+            [
+                'agendamento_origem_id.unique' => 'O agendamento selecionado já possui um atendimento realizado associado.',
+                'beneficiario_id.required' => 'O campo beneficiário é obrigatório.',
+                'profissional_id.required' => 'O campo profissional é obrigatório.',
+                'area_atendimento_id.required' => 'O campo área de atendimento é obrigatório.',
+                'data_hora_atendimento.required' => 'O campo data e hora do atendimento é obrigatório.',
+                'hora_registro.required' => 'O campo hora do registro é obrigatório.',
+                'data_hora_atendimento.before_or_equal' => 'A data e hora do atendimento não podem ser futuras.',
+            ]
+        );
 
         try {
             $atendimento->update($request->all());

@@ -312,7 +312,7 @@ return [
             'topnav_right' => true,
             'update_cfg' => [
                 'url' => '/notificacoes/json',
-                'period' => 15,
+                'period' => 120,
             ],
         ],
 

@@ -41,7 +41,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label><i class="fas fa-envelope mr-1"></i>Email</label>
-                    <input type="email" class="form-control" name="email" required>
+                    <input type="email" class="form-control" name="email">
                 </div>
                 <div class="form-group col-md-4">
                     <label for="area_atuacao_id">Área de Atuação</label>

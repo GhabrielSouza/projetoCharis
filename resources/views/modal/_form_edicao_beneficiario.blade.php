@@ -41,7 +41,7 @@
                                     class="fas fa-envelope"></i></span></div>
                         <input type="email" id="email-{{ $beneficiario->id }}" name="email"
                             class="form-control @error('email') is-invalid @enderror"
-                            value="{{ old('email', $beneficiario->email) }}" required>
+                            value="{{ old('email', $beneficiario->email) }}">
                     </div>
                     @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>

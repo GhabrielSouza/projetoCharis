@@ -46,8 +46,16 @@ class AgendamentoController extends Controller
             'tipo_de_atendimento_id' => 'required|exists:tipo_de_atendimento,id',
             'area_atendimento_id' => 'required|exists:areas_atuacao,id',
             'hora_registro' => 'required|string|max:5',
-            'data_hora_agendamento' => 'required|date|after:now',
+            'data_hora_agendamento' => 'required|date|after_or_equal:today',
             'observacoes_agendamento' => 'nullable|string|max:1000',
+        ], [
+            'data_hora_agendamento.after_or_equal' => 'A data e hora do agendamento deve ser igual ou posterior à data atual.',
+            'benefiaciarioi_id.required' => 'O campo beneficiário é obrigatório.',
+            'profissional_id.required' => 'O campo profissional é obrigatório.',
+            'tipo_de_atendimento_id.required' => 'O campo tipo de atendimento é obrigatório.',
+            'area_atendimento_id.required' => 'O campo área de atendimento é obrigatório.',
+            'hora_registro.required' => 'O campo hora de registro é obrigatório.',
+            'data_hora_agendamento.required' => 'O campo data e hora do agendamento é obrigatório.',
         ]);
 
         try {
@@ -97,6 +105,14 @@ class AgendamentoController extends Controller
             'observacoes_agendamento' => 'nullable|string|max:1000',
             'status_agendamento' => 'required|string|max:50',
             'agendamento' => 'required|in:Agendado,Confirmado,Cancelado,Realizado',
+        ], [
+            'data_hora_agendamento.after' => 'A data e hora do agendamento deve ser posterior à data atual.',
+            'benefiaciarioi_id.required' => 'O campo beneficiário é obrigatório.',
+            'profissional_id.required' => 'O campo profissional é obrigatório.',
+            'tipo_de_atendimento_id.required' => 'O campo tipo de atendimento é obrigatório.',
+            'area_atendimento_id.required' => 'O campo área de atendimento é obrigatório.',
+            'data_hora_agendamento.required' => 'O campo data e hora do agendamento é obrigatório.',
+            'hora_registro.required' => 'O campo hora de registro é obrigatório.',
         ]);
 
         try {

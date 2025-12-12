@@ -80,6 +80,18 @@ class ProfissionalController extends Controller
             'area_atuacao_id' => 'required|exists:areas_atuacao,id',
             'perfil' => 'required|in:Médico,Enfermeiro,Psicólogo,Assistente Social,Outro',
             'observacoes' => 'nullable|string'
+        ], [
+            'nome_completo.required' => 'O campo nome completo é obrigatório.',
+            'data_nascimento.required' => 'O campo data de nascimento é obrigatório.',
+            'sexo.required' => 'O campo sexo é obrigatório.',
+            'cpf.required' => 'O campo CPF é obrigatório.',
+            'cpf.unique' => 'O CPF informado já está cadastrado.',
+            'telefone.required' => 'O campo telefone é obrigatório.',
+            'numero_registro.required' => 'O campo número de registro é obrigatório.',
+            'area_atuacao_id.required' => 'O campo área de atuação é obrigatório.',
+            'area_atuacao_id.exists' => 'A área de atuação selecionada não existe.',
+            'perfil.required' => 'O campo perfil é obrigatório.',
+            'perfil.in' => 'O campo perfil contém um valor inválido.',
         ]);
 
         Profissional::create($validated);
@@ -107,6 +119,18 @@ class ProfissionalController extends Controller
                 'area_atuacao_id' => 'required|exists:areas_atuacao,id',
                 'perfil' => 'required|in:Médico,Enfermeiro,Psicólogo,Assistente Social,Outro',
                 'observacoes' => 'nullable|string'
+            ], [
+                'nome_completo.required' => 'O campo nome completo é obrigatório.',
+                'data_nascimento.required' => 'O campo data de nascimento é obrigatório.',
+                'sexo.required' => 'O campo sexo é obrigatório.',
+                'cpf.required' => 'O campo CPF é obrigatório.',
+                'cpf.unique' => 'O CPF informado já está cadastrado.',
+                'telefone.required' => 'O campo telefone é obrigatório.',
+                'numero_registro.required' => 'O campo número de registro é obrigatório.',
+                'area_atuacao_id.required' => 'O campo área de atuação é obrigatório.',
+                'area_atuacao_id.exists' => 'A área de atuação selecionada não existe.',
+                'perfil.required' => 'O campo perfil é obrigatório.',
+                'perfil.in' => 'O campo perfil contém um valor inválido.',
             ]);
 
             $profissional->update($validated);

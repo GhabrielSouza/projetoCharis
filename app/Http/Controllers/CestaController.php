@@ -29,6 +29,15 @@ class CestaController extends Controller
                 'data_entrega' => 'required|Date',
                 'quantidade' => 'required|int',
                 'observacoes' => 'nullable|string',
+            ],
+            [
+                'beneficiario_id.required' => 'O campo beneficiário é obrigatório.',
+                'beneficiario_id.exists' => 'O beneficiário selecionado não existe.',
+                'data_entrega.required' => 'O campo data de entrega é obrigatório.',
+                'data_entrega.date' => 'O campo data de entrega deve ser uma data válida.',
+                'quantidade.required' => 'O campo quantidade é obrigatório.',
+                'quantidade.integer' => 'O campo quantidade deve ser um número inteiro.',
+                'observacoes.string' => 'O campo observações deve ser uma string.',
             ]
         );
 
@@ -59,12 +68,23 @@ class CestaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validade = $request->validate([
-            'beneficiario_id' => 'required|exists:beneficiarios,id',
-            'data_entrega' => 'required|Date',
-            'quantidade' => 'required|int',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validade = $request->validate(
+            [
+                'beneficiario_id' => 'required|exists:beneficiarios,id',
+                'data_entrega' => 'required|Date',
+                'quantidade' => 'required|int',
+                'observacoes' => 'nullable|string',
+            ],
+            [
+                'beneficiario_id.required' => 'O campo beneficiário é obrigatório.',
+                'beneficiario_id.exists' => 'O beneficiário selecionado não existe.',
+                'data_entrega.required' => 'O campo data de entrega é obrigatório.',
+                'data_entrega.date' => 'O campo data de entrega deve ser uma data válida.',
+                'quantidade.required' => 'O campo quantidade é obrigatório.',
+                'quantidade.integer' => 'O campo quantidade deve ser um número inteiro.',
+                'observacoes.string' => 'O campo observações deve ser uma string.',
+            ]
+        );
 
         try {
             $cesta = CestaBasicaEntregue::findOrFail($id);

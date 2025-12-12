@@ -26,6 +26,7 @@
                                     <th>Data</th>
                                     <th>Hora</th>
                                     <th>Paciente</th>
+                                    <th>Profissional</th>
                                     <th>Telefone</th>
                                     <th>Status</th>
                                     <th>Agendamento</th>
@@ -40,6 +41,7 @@
                                         <td>{{ \Carbon\Carbon::parse($agendamento->hora_registro)->format('H:i') }}
                                         </td>
                                         <td>{{ $agendamento->beneficiario->nome }}</td>
+                                        <td>{{ $agendamento->profissional->nome_completo }}</td>
                                         <td>{{ $agendamento->beneficiario->telefone }}</td>
                                         <td>
                                             <span
@@ -115,7 +117,7 @@
                                     <th>Data</th>
                                     <th>Hora</th>
                                     <th>Paciente</th>
-
+                                    <th>Profissional</th>
                                     <th>Observações</th>
                                     <th>Ações</th>
                                 </tr>
@@ -127,6 +129,7 @@
                                         </td>
                                         <td>{{ \Carbon\Carbon::parse($atendimento->hora_registro)->format('H:i') }}</td>
                                         <td>{{ $atendimento->beneficiario->nome }}</td>
+                                        <td>{{ $atendimento->profissional->nome_completo }}</td>
                                         <td>{{ Str::limit($atendimento->descricao_atendimento, 50) }}</td>
                                         <td>
 

@@ -32,6 +32,10 @@ class SalasController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'profissional_id' => 'required|exists:profissionais,id',
+        ], [
+            'nome.required' => 'O campo nome é obrigatório.',
+            'profissional_id.required' => 'O campo profissional é obrigatório.',
+            'profissional_id.exists' => 'O profissional selecionado não existe.',
         ]);
 
         try {
@@ -52,6 +56,11 @@ class SalasController extends Controller
         $request->validate([
             'sala_id' => 'required|exists:salas,id',
             'beneficiario_id' => 'required|exists:beneficiarios,id',
+        ], [
+            'sala_id.required' => 'O campo sala é obrigatório.',
+            'sala_id.exists' => 'A sala selecionada não existe.',
+            'beneficiario_id.required' => 'O campo aluno é obrigatório.',
+            'beneficiario_id.exists' => 'O aluno selecionado não existe.',
         ]);
 
         try {
@@ -84,6 +93,10 @@ class SalasController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'profissional_id' => 'required|exists:profissionais,id',
+        ], [
+            'nome.required' => 'O campo nome é obrigatório.',
+            'profissional_id.required' => 'O campo profissional é obrigatório.',
+            'profissional_id.exists' => 'O profissional selecionado não existe.',
         ]);
 
         try {

@@ -179,7 +179,9 @@
             </tr>
             <tr>
                 <td class="label">Data</td>
-                <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($agendamento->data_hora_agendamento)->format('d/m/Y') }} |
+                    {{ $agendamento->hora_registro }}
+                </td>
             </tr>
         </table>
     </div>
