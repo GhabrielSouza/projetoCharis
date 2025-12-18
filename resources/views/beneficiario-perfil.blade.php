@@ -140,8 +140,8 @@
                                             <tr>
                                                 <td>{{ Carbon\Carbon::parse($atendimento->data_hora_atendimento)->format('d/m/Y') }}
                                                 </td>
-                                                <td>{{ $atendimento->profissional_id ?? 'N/A' }}</td>
-                                                <td>{{ $atendimento->area_atendimento_id ?? 'N/A' }}</td>
+                                                <td>{{ $atendimento->profissional->nome_completo ?? 'N/A' }}</td>
+                                                <td>{{ $atendimento->areaAtendimento->nome_area ?? 'N/A' }}</td>
                                                 <td>{{ Str::limit($atendimento->descricao_atendimento, 100) }}</td>
                                             </tr>
                                         @endforeach

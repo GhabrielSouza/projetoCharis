@@ -33,7 +33,7 @@ class SendNotificacaoAniversario
                 'nome' => $profissional->nome_completo,
                 'data' => $profissional->data_nascimento,
             ],
-            'user_id' => 1,
+            'user_id' => [1, 2],
         ]);
     }
 }
