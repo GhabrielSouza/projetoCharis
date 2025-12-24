@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BeneficiarioController;
 use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\NotificacaoController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -17,6 +19,11 @@ Route::any('/register', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('auth.change-password');
+Route::put('/change-password', [UserController::class, 'changePassword'])->name('auth.password.reset');
+Route::put('/profile', [UserController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [UserController::class, 'destroy'])->name('profile.destroy');
 
 Route::get('/beneficiarios', [App\Http\Controllers\BeneficiarioController::class, 'index'])->name('beneficiarios.index');
 Route::post("/beneficiarios", [App\Http\Controllers\BeneficiarioController::class, 'store'])->name('beneficiarios.store');
